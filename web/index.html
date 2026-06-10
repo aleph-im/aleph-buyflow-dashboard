@@ -3,180 +3,221 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Watch the cloud buy ALEPH — token flow ledger</title>
+<title>Watch the cloud buy ALEPH — token flow</title>
 <meta name="description" content="Public, verifiable ledger of Aleph Cloud credit purchases and on-chain ALEPH conversion: every market buy, distribution and burn, with Etherscan provenance.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560;9..144,700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,700;1,400&family=Source+Code+Pro:wght@400;600;700&family=Rubik:ital,wght@0,500;1,600;1,800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --paper: #faf6ee;
-  --paper-deep: #f1ebdd;
-  --ink: #1d1a14;
-  --ink-soft: #5d564a;
-  --ink-faint: #8d8474;
-  --rule: #c9bfa9;
-  --rule-soft: #e0d8c5;
-  --accent: #0e62fe;       /* ledger blue — stamps, links, live marks */
-  --buy: #176d3e;          /* settled green — credits in */
-  --burn: #b3401f;         /* sealing-wax red — the unactivated lever */
-  --serif: "Fraunces", Georgia, serif;
-  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  /* Aleph Cloud design system (front-core themes/aleph.ts) */
+  --base1: #141327;
+  --text: #FFFFFF;
+  --translucid: #FFFFFF0F;
+  --border0: #ffffff1a;
+  --border1: #ffffff66;
+  --main0: #029AFF;
+  --main1: #5CFFB1;
+  --main2: #FECD17;
+  --error: #D92446;
+  --muted: #ffffff99;
+  --faint: #ffffff66;
+  --grad-main0: linear-gradient(90deg, #00D1FF 0%, #0054FF 100%);
+  --grad-main1: linear-gradient(90deg, #EEFF9C 0%, #00FFBD 100%);
+  --grad-main2: linear-gradient(90deg, #FFE814 0%, #FBAE18 100%);
+  --grad-extra0: linear-gradient(90deg, #9B41FF 0%, #0054FF 100%);
+  --head: "Rubik", sans-serif;
+  --body: "Public Sans", sans-serif;
+  --code: "Source Code Pro", monospace;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { background: var(--paper); }
+html { background: var(--base1); }
 body {
-  font-family: var(--mono);
-  color: var(--ink);
+  font-family: var(--body);
+  color: var(--text);
   font-size: 15px;
-  line-height: 1.55;
-  background:
-    repeating-linear-gradient(0deg, transparent 0 31px, rgba(125, 110, 80, .055) 31px 32px),
-    radial-gradient(1200px 500px at 70% -10%, rgba(14, 98, 254, .045), transparent 60%),
-    var(--paper);
+  line-height: 1.6;
   min-height: 100vh;
+  background:
+    radial-gradient(900px 600px at 85% -5%, rgba(0, 84, 255, .22), transparent 65%),
+    radial-gradient(800px 700px at -10% 30%, rgba(155, 65, 255, .13), transparent 60%),
+    radial-gradient(700px 500px at 60% 110%, rgba(0, 255, 189, .07), transparent 60%),
+    var(--base1);
+  background-attachment: fixed;
 }
-/* paper grain */
+/* noise overlay (noisy-container vibe) */
 body::before {
   content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
 }
 
-.sheet { max-width: 1060px; margin: 0 auto; padding: 0 28px 90px; }
+.sheet { max-width: 1100px; margin: 0 auto; padding: 0 28px 100px; }
 
-a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(14,98,254,.35); }
-a:hover { border-bottom-color: var(--accent); }
+a { color: var(--main0); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* glass card */
+.card {
+  background: var(--translucid);
+  border: 1px solid var(--border0);
+  border-radius: 24px;
+  backdrop-filter: blur(12px);
+}
+
+/* uppercase italic micro-label (typo.info) */
+.info-label {
+  font-family: var(--head); font-style: italic; font-weight: 800;
+  font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted);
+}
 
 /* ───────── masthead ───────── */
-header { padding: 46px 0 0; }
+header { padding: 44px 0 0; }
 .masthead-rule {
-  display: flex; justify-content: space-between; align-items: baseline;
-  border-bottom: 2px solid var(--ink); padding-bottom: 10px;
-  font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft);
+  display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+  border-bottom: 1px solid var(--border0); padding-bottom: 12px;
 }
-.masthead-rule .live { color: var(--buy); }
+.masthead-rule .brand { font-family: var(--head); font-style: italic; font-weight: 600; font-size: 17px; }
+.masthead-rule .brand .dot-aleph { color: var(--main0); }
+.live { font-family: var(--code); font-size: 12px; color: var(--main1); }
 .live .dot {
   display: inline-block; width: 7px; height: 7px; border-radius: 50%;
-  background: var(--buy); margin-right: 7px; animation: pulse 2.4s ease infinite;
+  background: var(--main1); margin-right: 7px;
+  box-shadow: 0 0 10px 1px rgba(92, 255, 177, .8);
+  animation: pulse 2.4s ease infinite;
 }
-@keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .25 } }
+@keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .3 } }
 
 h1 {
-  font-family: var(--serif); font-weight: 560; font-size: clamp(42px, 7vw, 84px);
-  line-height: .98; letter-spacing: -.015em; margin: 34px 0 18px; max-width: 14ch;
+  font-family: var(--head); font-style: italic; font-weight: 800;
+  font-size: clamp(40px, 6.6vw, 78px);
+  line-height: 1.02; letter-spacing: -.01em; margin: 40px 0 18px; max-width: 15ch;
 }
-h1 em { font-style: italic; color: var(--accent); }
-.standfirst { max-width: 62ch; color: var(--ink-soft); font-size: 15px; }
-.standfirst strong { color: var(--ink); font-weight: 600; }
+h1 .grad {
+  background: var(--grad-main1);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.standfirst { max-width: 64ch; color: var(--muted); font-size: 15px; }
+.standfirst strong { color: var(--text); font-weight: 700; }
 
 /* staggered entrance */
 .rise { opacity: 0; transform: translateY(14px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
 @keyframes rise { to { opacity: 1; transform: none } }
 
 /* ───────── flow strip ───────── */
-.flow-strip {
-  margin: 44px 0 0; border: 1px solid var(--rule); background: rgba(255,255,255,.45);
-  display: grid; grid-template-columns: repeat(4, 1fr); position: relative;
-}
-.flow-step { padding: 16px 18px 14px; border-right: 1px dashed var(--rule); position: relative; }
+.flow-strip { margin: 40px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); overflow: hidden; }
+.flow-step { padding: 18px 20px 16px; border-right: 1px solid var(--border0); position: relative; }
 .flow-step:last-child { border-right: 0; }
-.flow-step .k { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); }
-.flow-step .v { font-family: var(--serif); font-size: 19px; font-weight: 560; margin-top: 2px; }
+.flow-step .v { font-family: var(--head); font-style: italic; font-weight: 600; font-size: 18px; margin-top: 3px; }
 .flow-step .arrow {
-  position: absolute; right: -9px; top: 50%; transform: translateY(-50%);
-  background: var(--paper); z-index: 2; color: var(--accent); font-weight: 600;
+  position: absolute; right: -7px; top: 50%; transform: translateY(-50%); z-index: 2;
+  color: var(--main0); font-weight: 700; background: #1d2138; border-radius: 50%;
+  width: 22px; height: 22px; line-height: 20px; text-align: center; font-size: 12px;
+  border: 1px solid var(--border0);
 }
+.flow-step.burn-step .v { color: var(--error); }
 
 /* ───────── counters ───────── */
-.counters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
-  border: 1px solid var(--ink); margin-top: 56px; background: var(--ink); }
-.counter { background: var(--paper); padding: 22px 22px 26px; min-height: 158px;
-  display: flex; flex-direction: column; gap: 6px; }
-.counter + .counter { border-left: 1px solid var(--ink); }
-.counter .label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+.counters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 52px; }
+.counter { padding: 22px 22px 24px; min-height: 168px; display: flex; flex-direction: column; gap: 7px; position: relative; overflow: hidden; }
+.counter::after { /* gradient hairline on top */
+  content: ""; position: absolute; top: 0; left: 24px; right: 24px; height: 2px;
+  background: var(--grad-main0); opacity: .9; border-radius: 2px;
+}
+.counter.green::after { background: var(--grad-main1); }
+.counter.purple::after { background: var(--grad-extra0); }
+.counter.burn::after { background: linear-gradient(90deg, #FFB393 0%, #FF6161 90.62%); }
 .counter .big {
-  font-family: var(--serif); font-size: clamp(30px, 3.6vw, 44px); font-weight: 700;
-  font-variant-numeric: tabular-nums; letter-spacing: -.01em; margin-top: auto;
+  font-family: var(--head); font-style: italic; font-weight: 800;
+  font-size: clamp(28px, 3.4vw, 40px); letter-spacing: -.01em; margin-top: auto;
+  font-variant-numeric: tabular-nums;
 }
-.counter .sub { font-size: 12px; color: var(--ink-faint); }
-.counter.burn { background: var(--paper-deep); }
-.counter.burn .big { color: var(--burn); }
+.counter.green .big {
+  background: var(--grad-main1);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.counter.burn .big { color: var(--error); }
+.counter .sub { font-size: 12px; color: var(--faint); font-family: var(--code); }
 
-/* burn lever stamp */
+/* burn lever chip */
 .lever {
-  margin-top: 10px; display: inline-flex; align-items: center; gap: 10px;
-  border: 1.5px dashed var(--burn); color: var(--burn); padding: 7px 12px;
-  font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase;
-  transform: rotate(-1.2deg); background: rgba(179,64,31,.04); width: fit-content;
+  margin-top: 8px; display: inline-flex; align-items: center; gap: 9px;
+  border: 1px dashed var(--error); color: #ff9eb1; padding: 6px 11px; border-radius: 12px;
+  font-family: var(--head); font-style: italic; font-weight: 800;
+  font-size: 10px; letter-spacing: .07em; text-transform: uppercase;
+  background: rgba(217, 36, 70, .08); width: fit-content;
 }
-.lever .switch { width: 26px; height: 14px; border: 1.5px solid var(--burn); border-radius: 8px; position: relative; flex: none; }
-.lever .switch::after { content: ""; position: absolute; left: 1px; top: 1px; width: 9px; height: 9px; border-radius: 50%; background: var(--burn); opacity: .55; }
+.lever .switch { width: 24px; height: 13px; border: 1.5px solid var(--error); border-radius: 8px; position: relative; flex: none; }
+.lever .switch::after { content: ""; position: absolute; left: 1px; top: 1px; width: 8px; height: 8px; border-radius: 50%; background: var(--error); opacity: .6; }
 
 /* ───────── sections ───────── */
 section { margin-top: 72px; }
-.sec-head { display: flex; align-items: baseline; gap: 14px; border-bottom: 1px solid var(--ink); padding-bottom: 8px; margin-bottom: 22px; }
-.sec-head .no { font-family: var(--serif); font-style: italic; color: var(--accent); font-size: 18px; }
-.sec-head h2 { font-family: var(--serif); font-weight: 560; font-size: 26px; letter-spacing: -.01em; }
-.sec-head .note { margin-left: auto; font-size: 11.5px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .1em; }
+.sec-head { display: flex; align-items: baseline; gap: 14px; border-bottom: 1px solid var(--border0); padding-bottom: 10px; margin-bottom: 22px; }
+.sec-head .no {
+  font-family: var(--code); font-weight: 600; font-size: 13px;
+  background: var(--grad-main0); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.sec-head h2 { font-family: var(--head); font-style: italic; font-weight: 800; font-size: 26px; }
+.sec-head .note { margin-left: auto; }
 
 /* chart */
-.chart-wrap { border: 1px solid var(--rule); background: rgba(255,255,255,.5); padding: 26px 22px 14px; }
-.chart-legend { display: flex; gap: 26px; font-size: 12px; color: var(--ink-soft); padding: 0 4px 14px; flex-wrap: wrap; }
-.chart-legend .key { display: inline-block; width: 11px; height: 11px; margin-right: 7px; vertical-align: -1px; }
-svg text { font-family: var(--mono); }
+.chart-wrap { padding: 26px 24px 16px; }
+.chart-legend { display: flex; gap: 26px; font-size: 12px; color: var(--muted); padding: 0 4px 16px; flex-wrap: wrap; font-family: var(--code); }
+.chart-legend .key { display: inline-block; width: 12px; height: 12px; margin-right: 7px; vertical-align: -1.5px; border-radius: 3px; }
+.chart-legend .key.usd { background: var(--grad-main1); }
+.chart-legend .key.aleph { background: var(--grad-main0); }
+svg text { font-family: var(--code); }
 .bar { transition: opacity .15s; }
-.bar:hover { opacity: .75; }
+.bar:hover { opacity: .8; }
+.right-cap { font-size: 12px; color: var(--faint); margin-top: 12px; }
 
 /* tables */
-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.table-card { padding: 6px 18px 10px; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; font-family: var(--code); }
 thead th {
-  text-align: left; font-weight: 500; font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--ink-faint); border-bottom: 1px solid var(--ink); padding: 0 12px 8px;
+  text-align: left; font-family: var(--head); font-style: italic; font-weight: 800;
+  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--muted); border-bottom: 1px solid var(--border1); padding: 14px 12px 9px;
 }
-tbody td { padding: 11px 12px; border-bottom: 1px solid var(--rule-soft); font-variant-numeric: tabular-nums; vertical-align: top; }
-tbody tr:hover { background: rgba(14,98,254,.035); }
+tbody td { padding: 12px; border-bottom: 1px solid var(--border0); font-variant-numeric: tabular-nums; vertical-align: top; white-space: nowrap; }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr:hover { background: var(--translucid); }
 td.num, th.num { text-align: right; }
-.tag { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; border: 1px solid currentColor; padding: 1.5px 7px; border-radius: 2px; white-space: nowrap; }
-.tag.buy { color: var(--buy); }
-.tag.pass { color: var(--ink-faint); }
-.hash { font-size: 12.5px; }
-.muted { color: var(--ink-faint); }
-.right-cap { font-size: 12px; color: var(--ink-faint); margin-top: 10px; }
-
-/* two-col tables zone */
-.split { display: grid; grid-template-columns: 1fr; gap: 26px; }
+.tag {
+  font-family: var(--head); font-style: italic; font-weight: 800;
+  font-size: 9.5px; letter-spacing: .07em; text-transform: uppercase;
+  border: 1px solid; padding: 2px 9px; border-radius: 10px; white-space: nowrap;
+}
+.tag.buy { color: var(--main1); border-color: rgba(92,255,177,.5); background: rgba(92,255,177,.07); }
+.tag.pass { color: var(--faint); border-color: var(--border0); }
+.hash a { font-size: 12px; }
+.muted { color: var(--faint); }
+.usd-equiv { color: var(--faint); font-size: 11.5px; }
 
 /* ───────── states ───────── */
 #error-state, #stale-banner { display: none; }
-#error-state {
-  border: 2px solid var(--burn); padding: 28px; margin-top: 56px; background: rgba(179,64,31,.05);
-}
-#error-state h2 { font-family: var(--serif); color: var(--burn); margin-bottom: 8px; }
+#error-state { border-color: rgba(217,36,70,.55); padding: 28px; margin-top: 56px; background: rgba(217, 36, 70, .07); }
+#error-state h2 { font-family: var(--head); font-style: italic; font-weight: 800; color: #ff8aa0; margin-bottom: 8px; }
 #stale-banner {
-  border: 1.5px dashed var(--burn); color: var(--burn); padding: 10px 16px; margin-top: 24px;
-  font-size: 13px;
+  border: 1px dashed var(--main2); color: var(--main2); padding: 12px 18px; margin-top: 24px;
+  font-size: 13px; border-radius: 16px; background: rgba(254, 205, 23, .06);
 }
 
 /* methodology */
-.method {
-  margin-top: 80px; border-top: 2px solid var(--ink); padding-top: 22px;
-  font-size: 12.5px; color: var(--ink-soft); columns: 2; column-gap: 48px;
-}
-.method p { margin-bottom: 12px; break-inside: avoid; }
-.method .lede { font-family: var(--serif); font-size: 15px; color: var(--ink); }
-code { background: var(--paper-deep); padding: 1px 6px; border-radius: 2px; font-size: 12px; word-break: break-all; }
+.method { margin-top: 80px; padding: 28px 30px; font-size: 13px; color: var(--muted); columns: 2; column-gap: 48px; }
+.method p { margin-bottom: 13px; break-inside: avoid; }
+.method .lede { font-family: var(--head); font-style: italic; font-weight: 600; font-size: 15px; color: var(--text); }
+.method strong { color: var(--text); }
+code { font-family: var(--code); background: var(--translucid); border: 1px solid var(--border0); padding: 1px 6px; border-radius: 6px; font-size: 11.5px; word-break: break-all; }
 
-footer { margin-top: 56px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;
-  font-size: 11.5px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .12em; }
+footer { margin-top: 48px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+footer .info-label { color: var(--faint); }
 
 @media (max-width: 900px) {
   .counters, .flow-strip { grid-template-columns: repeat(2, 1fr); }
-  .counter:nth-child(3) { border-left: 0; }
-  .counter { border-top: 1px solid var(--ink); }
-  .counter:nth-child(-n+2) { border-top: 0; }
   .flow-step:nth-child(2) { border-right: 0; }
-  .flow-step:nth-child(-n+2) { border-bottom: 1px dashed var(--rule); }
+  .flow-step:nth-child(-n+2) { border-bottom: 1px solid var(--border0); }
   .method { columns: 1; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -185,8 +226,7 @@ footer { margin-top: 56px; display: flex; justify-content: space-between; gap: 2
 }
 @media (max-width: 560px) {
   .counters, .flow-strip { grid-template-columns: 1fr; }
-  .counter { border-left: 0 !important; }
-  .flow-step { border-right: 0; border-bottom: 1px dashed var(--rule); }
+  .flow-step { border-right: 0; border-bottom: 1px solid var(--border0); }
   .flow-step:last-child { border-bottom: 0; }
   .hide-sm { display: none; }
 }
@@ -197,10 +237,10 @@ footer { margin-top: 56px; display: flex; justify-content: space-between; gap: 2
 
 <header>
   <div class="masthead-rule rise">
-    <span>Aleph Cloud — token flow ledger</span>
+    <span class="brand">aleph<span class="dot-aleph"> cloud</span> <span class="info-label" style="margin-left:10px">token flow</span></span>
     <span class="live" id="freshness"><span class="dot"></span>loading…</span>
   </div>
-  <h1 class="rise" style="animation-delay:.08s">Watch the cloud <em>buy ALEPH.</em></h1>
+  <h1 class="rise" style="animation-delay:.08s">Watch the cloud <span class="grad">buy ALEPH.</span></h1>
   <p class="standfirst rise" style="animation-delay:.16s">
     Every compute credit bought on Aleph Cloud is settled through an on-chain payment processor:
     non-ALEPH payments are <strong>market-bought into ALEPH</strong>, then split between network
@@ -208,17 +248,17 @@ footer { margin-top: 56px; display: flex; justify-content: space-between; gap: 2
     ledger of that mechanism — small numbers, real provenance. Verify every line on Etherscan.
   </p>
 
-  <div class="flow-strip rise" style="animation-delay:.24s" aria-label="Flow of funds">
-    <div class="flow-step"><div class="k">01 · Payment</div><div class="v">Any token in</div><span class="arrow">→</span></div>
-    <div class="flow-step"><div class="k">02 · Swap</div><div class="v">Market-buy ALEPH</div><span class="arrow">→</span></div>
-    <div class="flow-step"><div class="k">03 · Split</div><div class="v">Network · Devs</div><span class="arrow">→</span></div>
-    <div class="flow-step"><div class="k">04 · Burn</div><div class="v">0% — lever idle</div></div>
+  <div class="flow-strip card rise" style="animation-delay:.24s" aria-label="Flow of funds">
+    <div class="flow-step"><div class="info-label">01 · Payment</div><div class="v">Any token in</div><span class="arrow">→</span></div>
+    <div class="flow-step"><div class="info-label">02 · Swap</div><div class="v">Market-buy ALEPH</div><span class="arrow">→</span></div>
+    <div class="flow-step"><div class="info-label">03 · Split</div><div class="v">Network · Devs</div><span class="arrow">→</span></div>
+    <div class="flow-step burn-step"><div class="info-label">04 · Burn</div><div class="v">0% — lever idle</div></div>
   </div>
 </header>
 
 <div id="stale-banner"></div>
 
-<div id="error-state">
+<div id="error-state" class="card">
   <h2>Ledger temporarily unavailable</h2>
   <p>The data cache could not be loaded. Rather than show you zeros that look like facts,
      we show you this notice. The on-chain record is unaffected — see the
@@ -228,23 +268,23 @@ footer { margin-top: 56px; display: flex; justify-content: space-between; gap: 2
 <main id="ledger" style="display:none">
 
   <div class="counters">
-    <div class="counter">
-      <span class="label">Credits purchased</span>
+    <div class="counter card green">
+      <span class="info-label">Credits purchased</span>
       <span class="big" id="c-usd">—</span>
-      <span class="sub" id="c-usd-sub">cumulative USD, net of bonus credits</span>
+      <span class="sub" id="c-usd-sub"></span>
     </div>
-    <div class="counter">
-      <span class="label">ALEPH market-bought</span>
+    <div class="counter card">
+      <span class="info-label">ALEPH market-bought</span>
       <span class="big" id="c-bought">—</span>
-      <span class="sub" id="c-bought-sub">swapped on-chain from non-ALEPH payments</span>
+      <span class="sub">swapped on-chain from non-ALEPH payments</span>
     </div>
-    <div class="counter">
-      <span class="label">ALEPH distributed</span>
+    <div class="counter card purple">
+      <span class="info-label">ALEPH distributed</span>
       <span class="big" id="c-dist">—</span>
       <span class="sub">to the network: CRNs, stakers, CCNs</span>
     </div>
-    <div class="counter burn">
-      <span class="label">ALEPH burned</span>
+    <div class="counter card burn">
+      <span class="info-label">ALEPH burned</span>
       <span class="big" id="c-burned">—</span>
       <div class="lever"><span class="switch"></span><span>burn 0% · governance lever, unactivated</span></div>
     </div>
@@ -253,12 +293,12 @@ footer { margin-top: 56px; display: flex; justify-content: space-between; gap: 2
   <section>
     <div class="sec-head">
       <span class="no">§1</span><h2>Monthly flow</h2>
-      <span class="note">USD purchased · ALEPH converted</span>
+      <span class="note info-label">USD purchased · ALEPH converted</span>
     </div>
-    <div class="chart-wrap">
+    <div class="chart-wrap card">
       <div class="chart-legend">
-        <span><span class="key" style="background:var(--buy)"></span>Credits purchased (USD)</span>
-        <span><span class="key" style="background:var(--accent)"></span>ALEPH distributed on-chain</span>
+        <span><span class="key usd"></span>Credits purchased (USD)</span>
+        <span><span class="key aleph"></span>ALEPH distributed on-chain</span>
       </div>
       <div id="chart"></div>
     </div>
@@ -269,8 +309,9 @@ footer { margin-top: 56px; display: flex; justify-content: space-between; gap: 2
   <section>
     <div class="sec-head">
       <span class="no">§2</span><h2>On-chain processing runs</h2>
-      <span class="note" id="runs-note"></span>
+      <span class="note info-label" id="runs-note"></span>
     </div>
+    <div class="table-card card">
     <table>
       <thead><tr>
         <th>Date</th><th>Paid in</th><th class="num">Amount in</th><th class="num">ALEPH out</th>
@@ -278,22 +319,25 @@ footer { margin-top: 56px; display: flex; justify-content: space-between; gap: 2
       </tr></thead>
       <tbody id="runs-body"></tbody>
     </table>
+    </div>
   </section>
 
   <section>
     <div class="sec-head">
       <span class="no">§3</span><h2>Latest credit purchases</h2>
-      <span class="note" id="purchases-note"></span>
+      <span class="note info-label" id="purchases-note"></span>
     </div>
+    <div class="table-card card">
     <table>
       <thead><tr>
-        <th>Date</th><th>Chain</th><th>Paid in</th><th class="num">USD</th><th class="num hide-sm">Credits</th><th>Proof</th>
+        <th>Date</th><th>Chain</th><th>Paid in</th><th class="num">USD paid</th><th class="num hide-sm">Credits (≈ USD)</th><th>Proof</th>
       </tr></thead>
       <tbody id="purchases-body"></tbody>
     </table>
+    </div>
   </section>
 
-  <div class="method">
+  <div class="method card">
     <p class="lede" id="method-lede"></p>
     <p><strong>Contract.</strong> AlephPaymentProcessor on Ethereum mainnet,
       <code>0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B</code>
@@ -302,7 +346,8 @@ footer { margin-top: 56px; display: flex; justify-content: space-between; gap: 2
       run, carrying the swap, burn and distribution amounts. Nothing here is self-reported.</p>
     <p><strong>Credits.</strong> Purchase data comes from the public Credit API
       (<a href="https://credit.aleph.im/api/v0/payment" rel="noopener"><code>credit.aleph.im/api/v0/payment</code></a>).
-      USD figures count what buyers actually paid: bonus credits are excluded. Failed payments are excluded.</p>
+      Credits are denominated at <strong>1,000,000 credits = $1</strong>; USD-paid figures count what buyers
+      actually paid — bonus credits are excluded, failed payments are excluded.</p>
     <p><strong>Burn.</strong> The burn percentage is a governance-controlled parameter, currently 0%.
       When activated, burned amounts will appear here from the same events — the lever above flips, nothing else changes.</p>
     <p><strong>Mechanism.</strong> Full tokenomics:
@@ -312,8 +357,8 @@ footer { margin-top: 56px; display: flex; justify-content: space-between; gap: 2
   </div>
 
   <footer>
-    <span>Aleph Cloud · decentralized compute</span>
-    <span id="foot-fresh"></span>
+    <span class="info-label">Aleph Cloud · decentralized compute</span>
+    <span class="info-label" id="foot-fresh"></span>
   </footer>
 </main>
 
@@ -322,10 +367,17 @@ footer { margin-top: 56px; display: flex; justify-content: space-between; gap: 2
 <script>
 const $ = (id) => document.getElementById(id);
 const ES_TX = (h) => `https://etherscan.io/tx/${h}`;
+const CREDITS_PER_USD = 1e6; // credit_price_usdc = 1e-6
 
 const fmtUsd = (v, dp = 0) => "$" + v.toLocaleString("en-US", { minimumFractionDigits: dp, maximumFractionDigits: dp });
 const fmtNum = (v, dp = 0) => v.toLocaleString("en-US", { minimumFractionDigits: dp, maximumFractionDigits: dp });
-const fmtAleph = (v) => !v ? "0" : v >= 1e6 ? fmtNum(v / 1e6, 2) + "M" : v >= 1e4 ? fmtNum(v / 1e3, 1) + "K" : fmtNum(v, v < 100 ? 1 : 0);
+const fmtCompact = (v, unit = "") => !v ? "0" + unit
+  : v >= 1e9 ? fmtNum(v / 1e9, 2) + "B" + unit
+  : v >= 1e6 ? fmtNum(v / 1e6, 2) + "M" + unit
+  : v >= 1e4 ? fmtNum(v / 1e3, 1) + "K" + unit
+  : fmtNum(v, v < 100 ? 1 : 0) + unit;
+const fmtAleph = (v) => fmtCompact(v);
+const creditsUsd = (c) => fmtUsd(c / CREDITS_PER_USD, 2);
 const fmtDate = (ms) => new Date(ms).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
 const monthLabel = (m) => new Date(m + "-15").toLocaleDateString("en-GB", { month: "short", year: "2-digit" }).replace(" ", " ’");
 const shortHash = (h) => h ? h.slice(0, 8) + "…" + h.slice(-6) : "—";
@@ -348,29 +400,32 @@ function renderChart(monthly) {
   const yU = v => ih - (v / maxUsd) * ih;
   const yA = v => ih - (v / maxAleph) * ih;
   let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Monthly credits purchased and ALEPH distributed" style="width:100%;height:auto">`;
-  // gridlines
+  s += `<defs>
+    <linearGradient id="gUsd" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#00FFBD"/><stop offset="1" stop-color="#EEFF9C"/></linearGradient>
+    <linearGradient id="gAleph" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#0054FF"/><stop offset="1" stop-color="#00D1FF"/></linearGradient>
+  </defs>`;
   for (let g = 0; g <= 3; g++) {
     const y = PAD.t + (ih / 3) * g;
-    s += `<line x1="${PAD.l}" x2="${W - PAD.r}" y1="${y}" y2="${y}" stroke="#c9bfa9" stroke-width="${g === 3 ? 1.4 : .6}" ${g < 3 ? 'stroke-dasharray="2 5"' : ""}/>`;
-    s += `<text x="${PAD.l - 10}" y="${y + 4}" text-anchor="end" font-size="10.5" fill="#8d8474">${fmtUsd(maxUsd * (1 - g / 3))}</text>`;
-    s += `<text x="${W - PAD.r + 10}" y="${y + 4}" font-size="10.5" fill="#8d8474">${fmtAleph(maxAleph * (1 - g / 3))}</text>`;
+    s += `<line x1="${PAD.l}" x2="${W - PAD.r}" y1="${y}" y2="${y}" stroke="#ffffff" stroke-opacity="${g === 3 ? .35 : .12}" stroke-width="${g === 3 ? 1.2 : .7}" ${g < 3 ? 'stroke-dasharray="2 6"' : ""}/>`;
+    s += `<text x="${PAD.l - 10}" y="${y + 4}" text-anchor="end" font-size="10.5" fill="#ffffff80">${fmtUsd(maxUsd * (1 - g / 3))}</text>`;
+    s += `<text x="${W - PAD.r + 10}" y="${y + 4}" font-size="10.5" fill="#ffffff80">${fmtAleph(maxAleph * (1 - g / 3))}</text>`;
   }
   monthly.forEach((m, i) => {
     const cx = PAD.l + slot * i + slot / 2;
     if (m.usd) {
       const y = PAD.t + yU(m.usd);
-      s += `<rect class="bar" x="${cx - bw - 2}" y="${y}" width="${bw}" height="${ih - yU(m.usd)}" fill="#176d3e"><title>${monthLabel(m.month)} — ${fmtUsd(m.usd, 2)} purchased (${m.purchases} purchases)</title></rect>`;
-      s += `<text x="${cx - bw / 2 - 2}" y="${y - 6}" text-anchor="middle" font-size="10" fill="#176d3e">${fmtUsd(m.usd)}</text>`;
+      s += `<rect class="bar" rx="3" x="${cx - bw - 2}" y="${y}" width="${bw}" height="${Math.max(ih - yU(m.usd), 2)}" fill="url(#gUsd)"><title>${monthLabel(m.month)} — ${fmtUsd(m.usd, 2)} purchased (${m.purchases} purchases, ${fmtCompact(m.credits)} credits)</title></rect>`;
+      s += `<text x="${cx - bw / 2 - 2}" y="${y - 6}" text-anchor="middle" font-size="10" fill="#5CFFB1">${fmtUsd(m.usd)}</text>`;
     }
     if (m.alephDistributed) {
       const y = PAD.t + yA(m.alephDistributed);
-      s += `<rect class="bar" x="${cx + 2}" y="${y}" width="${bw}" height="${ih - yA(m.alephDistributed)}" fill="#0e62fe"><title>${monthLabel(m.month)} — ${fmtAleph(m.alephDistributed)} ALEPH distributed</title></rect>`;
-      s += `<text x="${cx + bw / 2 + 2}" y="${y - 6}" text-anchor="middle" font-size="10" fill="#0e62fe">${fmtAleph(m.alephDistributed)}</text>`;
+      s += `<rect class="bar" rx="3" x="${cx + 2}" y="${y}" width="${bw}" height="${Math.max(ih - yA(m.alephDistributed), 2)}" fill="url(#gAleph)"><title>${monthLabel(m.month)} — ${fmtAleph(m.alephDistributed)} ALEPH distributed</title></rect>`;
+      s += `<text x="${cx + bw / 2 + 2}" y="${y - 6}" text-anchor="middle" font-size="10" fill="#02b6ff">${fmtAleph(m.alephDistributed)}</text>`;
     }
-    s += `<text x="${cx}" y="${H - 12}" text-anchor="middle" font-size="11" fill="#5d564a">${monthLabel(m.month)}</text>`;
+    s += `<text x="${cx}" y="${H - 12}" text-anchor="middle" font-size="11" fill="#ffffff99">${monthLabel(m.month)}</text>`;
   });
-  s += `<text x="${PAD.l}" y="${H - 1}" font-size="9.5" fill="#8d8474">left axis: USD</text>`;
-  s += `<text x="${W - PAD.r}" y="${H - 1}" text-anchor="end" font-size="9.5" fill="#8d8474">right axis: ALEPH</text>`;
+  s += `<text x="${PAD.l}" y="${H - 1}" font-size="9.5" fill="#ffffff66">left axis: USD</text>`;
+  s += `<text x="${W - PAD.r}" y="${H - 1}" text-anchor="end" font-size="9.5" fill="#ffffff66">right axis: ALEPH</text>`;
   $("chart").innerHTML = s + "</svg>";
 }
 
@@ -386,7 +441,9 @@ function render(d) {
   }
 
   $("c-usd").textContent = fmtUsd(d.credits.totalUsd, 0);
-  $("c-usd-sub").textContent = `${fmtNum(d.credits.completedPurchases)} purchases since ${fmtDate(d.credits.firstPurchaseAt)} · net of bonus credits`;
+  $("c-usd-sub").textContent =
+    `${fmtNum(d.credits.completedPurchases)} purchases since ${fmtDate(d.credits.firstPurchaseAt)} · ` +
+    `${fmtCompact(d.credits.totalCredits)} credits issued ≈ ${creditsUsd(d.credits.totalCredits)} incl. bonus`;
   $("c-bought").textContent = fmtAleph(d.chain.alephMarketBought);
   $("c-dist").textContent = fmtAleph(d.chain.alephDistributed);
   $("c-burned").textContent = fmtAleph(d.chain.alephBurned);
@@ -412,7 +469,7 @@ function render(d) {
     <td>${p.chain}</td>
     <td>${p.currency}</td>
     <td class="num">${fmtUsd(p.usd, 2)}</td>
-    <td class="num hide-sm">${fmtNum(p.credits)}</td>
+    <td class="num hide-sm">${fmtNum(p.credits)} <span class="usd-equiv">≈ ${creditsUsd(p.credits)}</span></td>
     <td class="hash">${p.txHash && p.chain === "ethereum" ? `<a href="${ES_TX(p.txHash)}" rel="noopener">${shortHash(p.txHash)}</a>` : `<span class="muted">${shortHash(p.txHash)}</span>`}</td>
   </tr>`).join("");
 
@@ -427,7 +484,7 @@ fetch("./data/flow.json", { cache: "no-store" })
   .catch(() => {
     // Honesty guardrail: never render zeros on fetch failure.
     $("error-state").style.display = "block";
-    $("freshness").innerHTML = `<span class="dot" style="background:var(--burn)"></span><span style="color:var(--burn)">data unavailable</span>`;
+    $("freshness").innerHTML = `<span class="dot" style="background:var(--error);box-shadow:0 0 10px 1px rgba(217,36,70,.8)"></span><span style="color:var(--error)">data unavailable</span>`;
   });
 </script>
 </body>
