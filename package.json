@@ -1,0 +1,12 @@
+{
+  "name": "aleph-buyflow-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Watch the cloud buy ALEPH — public token-flow transparency dashboard",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "fetch": "node pipeline/fetch.mjs",
+    "serve": "python3 -m http.server -d web 8000"
+  }
+}

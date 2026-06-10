@@ -1,0 +1,56 @@
+name: Refresh data & deploy
+
+on:
+  schedule:
+    - cron: "17 * * * *" # hourly, off the minute-0 rush
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Fails non-zero on any source error; the previous cache is then kept
+      # and deployed as-is (never publish zeros — P0-03 lesson).
+      - name: Run pipeline
+        run: node pipeline/fetch.mjs
+        env:
+          ETH_RPC_URL: ${{ vars.ETH_RPC_URL || 'https://ethereum-rpc.publicnode.com' }}
+
+      - name: Commit updated cache
+        run: |
+          git config user.name "buyflow-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add web/data/flow.json
+          git diff --cached --quiet || git commit -m "data: refresh flow.json"
+          git push
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+
+  deploy:
+    needs: refresh
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

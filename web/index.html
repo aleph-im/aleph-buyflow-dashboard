@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Watch the cloud buy ALEPH — token flow ledger</title>
+<meta name="description" content="Public, verifiable ledger of Aleph Cloud credit purchases and on-chain ALEPH conversion: every market buy, distribution and burn, with Etherscan provenance.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,560;9..144,700&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #faf6ee;
+  --paper-deep: #f1ebdd;
+  --ink: #1d1a14;
+  --ink-soft: #5d564a;
+  --ink-faint: #8d8474;
+  --rule: #c9bfa9;
+  --rule-soft: #e0d8c5;
+  --accent: #0e62fe;       /* ledger blue — stamps, links, live marks */
+  --buy: #176d3e;          /* settled green — credits in */
+  --burn: #b3401f;         /* sealing-wax red — the unactivated lever */
+  --serif: "Fraunces", Georgia, serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { background: var(--paper); }
+body {
+  font-family: var(--mono);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.55;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 31px, rgba(125, 110, 80, .055) 31px 32px),
+    radial-gradient(1200px 500px at 70% -10%, rgba(14, 98, 254, .045), transparent 60%),
+    var(--paper);
+  min-height: 100vh;
+}
+/* paper grain */
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E");
+}
+
+.sheet { max-width: 1060px; margin: 0 auto; padding: 0 28px 90px; }
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(14,98,254,.35); }
+a:hover { border-bottom-color: var(--accent); }
+
+/* ───────── masthead ───────── */
+header { padding: 46px 0 0; }
+.masthead-rule {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-bottom: 2px solid var(--ink); padding-bottom: 10px;
+  font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft);
+}
+.masthead-rule .live { color: var(--buy); }
+.live .dot {
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--buy); margin-right: 7px; animation: pulse 2.4s ease infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1 } 50% { opacity: .25 } }
+
+h1 {
+  font-family: var(--serif); font-weight: 560; font-size: clamp(42px, 7vw, 84px);
+  line-height: .98; letter-spacing: -.015em; margin: 34px 0 18px; max-width: 14ch;
+}
+h1 em { font-style: italic; color: var(--accent); }
+.standfirst { max-width: 62ch; color: var(--ink-soft); font-size: 15px; }
+.standfirst strong { color: var(--ink); font-weight: 600; }
+
+/* staggered entrance */
+.rise { opacity: 0; transform: translateY(14px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; }
+@keyframes rise { to { opacity: 1; transform: none } }
+
+/* ───────── flow strip ───────── */
+.flow-strip {
+  margin: 44px 0 0; border: 1px solid var(--rule); background: rgba(255,255,255,.45);
+  display: grid; grid-template-columns: repeat(4, 1fr); position: relative;
+}
+.flow-step { padding: 16px 18px 14px; border-right: 1px dashed var(--rule); position: relative; }
+.flow-step:last-child { border-right: 0; }
+.flow-step .k { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); }
+.flow-step .v { font-family: var(--serif); font-size: 19px; font-weight: 560; margin-top: 2px; }
+.flow-step .arrow {
+  position: absolute; right: -9px; top: 50%; transform: translateY(-50%);
+  background: var(--paper); z-index: 2; color: var(--accent); font-weight: 600;
+}
+
+/* ───────── counters ───────── */
+.counters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+  border: 1px solid var(--ink); margin-top: 56px; background: var(--ink); }
+.counter { background: var(--paper); padding: 22px 22px 26px; min-height: 158px;
+  display: flex; flex-direction: column; gap: 6px; }
+.counter + .counter { border-left: 1px solid var(--ink); }
+.counter .label { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+.counter .big {
+  font-family: var(--serif); font-size: clamp(30px, 3.6vw, 44px); font-weight: 700;
+  font-variant-numeric: tabular-nums; letter-spacing: -.01em; margin-top: auto;
+}
+.counter .sub { font-size: 12px; color: var(--ink-faint); }
+.counter.burn { background: var(--paper-deep); }
+.counter.burn .big { color: var(--burn); }
+
+/* burn lever stamp */
+.lever {
+  margin-top: 10px; display: inline-flex; align-items: center; gap: 10px;
+  border: 1.5px dashed var(--burn); color: var(--burn); padding: 7px 12px;
+  font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase;
+  transform: rotate(-1.2deg); background: rgba(179,64,31,.04); width: fit-content;
+}
+.lever .switch { width: 26px; height: 14px; border: 1.5px solid var(--burn); border-radius: 8px; position: relative; flex: none; }
+.lever .switch::after { content: ""; position: absolute; left: 1px; top: 1px; width: 9px; height: 9px; border-radius: 50%; background: var(--burn); opacity: .55; }
+
+/* ───────── sections ───────── */
+section { margin-top: 72px; }
+.sec-head { display: flex; align-items: baseline; gap: 14px; border-bottom: 1px solid var(--ink); padding-bottom: 8px; margin-bottom: 22px; }
+.sec-head .no { font-family: var(--serif); font-style: italic; color: var(--accent); font-size: 18px; }
+.sec-head h2 { font-family: var(--serif); font-weight: 560; font-size: 26px; letter-spacing: -.01em; }
+.sec-head .note { margin-left: auto; font-size: 11.5px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .1em; }
+
+/* chart */
+.chart-wrap { border: 1px solid var(--rule); background: rgba(255,255,255,.5); padding: 26px 22px 14px; }
+.chart-legend { display: flex; gap: 26px; font-size: 12px; color: var(--ink-soft); padding: 0 4px 14px; flex-wrap: wrap; }
+.chart-legend .key { display: inline-block; width: 11px; height: 11px; margin-right: 7px; vertical-align: -1px; }
+svg text { font-family: var(--mono); }
+.bar { transition: opacity .15s; }
+.bar:hover { opacity: .75; }
+
+/* tables */
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+thead th {
+  text-align: left; font-weight: 500; font-size: 11px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--ink-faint); border-bottom: 1px solid var(--ink); padding: 0 12px 8px;
+}
+tbody td { padding: 11px 12px; border-bottom: 1px solid var(--rule-soft); font-variant-numeric: tabular-nums; vertical-align: top; }
+tbody tr:hover { background: rgba(14,98,254,.035); }
+td.num, th.num { text-align: right; }
+.tag { font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; border: 1px solid currentColor; padding: 1.5px 7px; border-radius: 2px; white-space: nowrap; }
+.tag.buy { color: var(--buy); }
+.tag.pass { color: var(--ink-faint); }
+.hash { font-size: 12.5px; }
+.muted { color: var(--ink-faint); }
+.right-cap { font-size: 12px; color: var(--ink-faint); margin-top: 10px; }
+
+/* two-col tables zone */
+.split { display: grid; grid-template-columns: 1fr; gap: 26px; }
+
+/* ───────── states ───────── */
+#error-state, #stale-banner { display: none; }
+#error-state {
+  border: 2px solid var(--burn); padding: 28px; margin-top: 56px; background: rgba(179,64,31,.05);
+}
+#error-state h2 { font-family: var(--serif); color: var(--burn); margin-bottom: 8px; }
+#stale-banner {
+  border: 1.5px dashed var(--burn); color: var(--burn); padding: 10px 16px; margin-top: 24px;
+  font-size: 13px;
+}
+
+/* methodology */
+.method {
+  margin-top: 80px; border-top: 2px solid var(--ink); padding-top: 22px;
+  font-size: 12.5px; color: var(--ink-soft); columns: 2; column-gap: 48px;
+}
+.method p { margin-bottom: 12px; break-inside: avoid; }
+.method .lede { font-family: var(--serif); font-size: 15px; color: var(--ink); }
+code { background: var(--paper-deep); padding: 1px 6px; border-radius: 2px; font-size: 12px; word-break: break-all; }
+
+footer { margin-top: 56px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+  font-size: 11.5px; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .12em; }
+
+@media (max-width: 900px) {
+  .counters, .flow-strip { grid-template-columns: repeat(2, 1fr); }
+  .counter:nth-child(3) { border-left: 0; }
+  .counter { border-top: 1px solid var(--ink); }
+  .counter:nth-child(-n+2) { border-top: 0; }
+  .flow-step:nth-child(2) { border-right: 0; }
+  .flow-step:nth-child(-n+2) { border-bottom: 1px dashed var(--rule); }
+  .method { columns: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise { animation: none; opacity: 1; transform: none; }
+  .live .dot { animation: none; }
+}
+@media (max-width: 560px) {
+  .counters, .flow-strip { grid-template-columns: 1fr; }
+  .counter { border-left: 0 !important; }
+  .flow-step { border-right: 0; border-bottom: 1px dashed var(--rule); }
+  .flow-step:last-child { border-bottom: 0; }
+  .hide-sm { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header>
+  <div class="masthead-rule rise">
+    <span>Aleph Cloud — token flow ledger</span>
+    <span class="live" id="freshness"><span class="dot"></span>loading…</span>
+  </div>
+  <h1 class="rise" style="animation-delay:.08s">Watch the cloud <em>buy ALEPH.</em></h1>
+  <p class="standfirst rise" style="animation-delay:.16s">
+    Every compute credit bought on Aleph Cloud is settled through an on-chain payment processor:
+    non-ALEPH payments are <strong>market-bought into ALEPH</strong>, then split between network
+    distribution, development, and an <strong>optional burn</strong>. This page is the unedited
+    ledger of that mechanism — small numbers, real provenance. Verify every line on Etherscan.
+  </p>
+
+  <div class="flow-strip rise" style="animation-delay:.24s" aria-label="Flow of funds">
+    <div class="flow-step"><div class="k">01 · Payment</div><div class="v">Any token in</div><span class="arrow">→</span></div>
+    <div class="flow-step"><div class="k">02 · Swap</div><div class="v">Market-buy ALEPH</div><span class="arrow">→</span></div>
+    <div class="flow-step"><div class="k">03 · Split</div><div class="v">Network · Devs</div><span class="arrow">→</span></div>
+    <div class="flow-step"><div class="k">04 · Burn</div><div class="v">0% — lever idle</div></div>
+  </div>
+</header>
+
+<div id="stale-banner"></div>
+
+<div id="error-state">
+  <h2>Ledger temporarily unavailable</h2>
+  <p>The data cache could not be loaded. Rather than show you zeros that look like facts,
+     we show you this notice. The on-chain record is unaffected — see the
+     <a href="https://etherscan.io/address/0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B" rel="noopener">payment processor on Etherscan</a>.</p>
+</div>
+
+<main id="ledger" style="display:none">
+
+  <div class="counters">
+    <div class="counter">
+      <span class="label">Credits purchased</span>
+      <span class="big" id="c-usd">—</span>
+      <span class="sub" id="c-usd-sub">cumulative USD, net of bonus credits</span>
+    </div>
+    <div class="counter">
+      <span class="label">ALEPH market-bought</span>
+      <span class="big" id="c-bought">—</span>
+      <span class="sub" id="c-bought-sub">swapped on-chain from non-ALEPH payments</span>
+    </div>
+    <div class="counter">
+      <span class="label">ALEPH distributed</span>
+      <span class="big" id="c-dist">—</span>
+      <span class="sub">to the network: CRNs, stakers, CCNs</span>
+    </div>
+    <div class="counter burn">
+      <span class="label">ALEPH burned</span>
+      <span class="big" id="c-burned">—</span>
+      <div class="lever"><span class="switch"></span><span>burn 0% · governance lever, unactivated</span></div>
+    </div>
+  </div>
+
+  <section>
+    <div class="sec-head">
+      <span class="no">§1</span><h2>Monthly flow</h2>
+      <span class="note">USD purchased · ALEPH converted</span>
+    </div>
+    <div class="chart-wrap">
+      <div class="chart-legend">
+        <span><span class="key" style="background:var(--buy)"></span>Credits purchased (USD)</span>
+        <span><span class="key" style="background:var(--accent)"></span>ALEPH distributed on-chain</span>
+      </div>
+      <div id="chart"></div>
+    </div>
+    <p class="right-cap">Distribution runs are batched: credits accumulate in the processor and are converted in
+       discrete on-chain runs, so purchase months and conversion months don't line up one-to-one.</p>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="no">§2</span><h2>On-chain processing runs</h2>
+      <span class="note" id="runs-note"></span>
+    </div>
+    <table>
+      <thead><tr>
+        <th>Date</th><th>Paid in</th><th class="num">Amount in</th><th class="num">ALEPH out</th>
+        <th class="num">→ Network</th><th class="num hide-sm">→ Burn</th><th>Type</th><th>Proof</th>
+      </tr></thead>
+      <tbody id="runs-body"></tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <span class="no">§3</span><h2>Latest credit purchases</h2>
+      <span class="note" id="purchases-note"></span>
+    </div>
+    <table>
+      <thead><tr>
+        <th>Date</th><th>Chain</th><th>Paid in</th><th class="num">USD</th><th class="num hide-sm">Credits</th><th>Proof</th>
+      </tr></thead>
+      <tbody id="purchases-body"></tbody>
+    </table>
+  </section>
+
+  <div class="method">
+    <p class="lede" id="method-lede"></p>
+    <p><strong>Contract.</strong> AlephPaymentProcessor on Ethereum mainnet,
+      <code>0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B</code>
+      (<a href="https://etherscan.io/address/0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B" rel="noopener">Etherscan</a>).
+      On-chain figures are decoded from <code>TokenPaymentsProcessed</code> events — one event per processing
+      run, carrying the swap, burn and distribution amounts. Nothing here is self-reported.</p>
+    <p><strong>Credits.</strong> Purchase data comes from the public Credit API
+      (<a href="https://credit.aleph.im/api/v0/payment" rel="noopener"><code>credit.aleph.im/api/v0/payment</code></a>).
+      USD figures count what buyers actually paid: bonus credits are excluded. Failed payments are excluded.</p>
+    <p><strong>Burn.</strong> The burn percentage is a governance-controlled parameter, currently 0%.
+      When activated, burned amounts will appear here from the same events — the lever above flips, nothing else changes.</p>
+    <p><strong>Mechanism.</strong> Full tokenomics:
+      <a href="https://tokenomics.aleph.cloud" rel="noopener">tokenomics.aleph.cloud</a>.
+      This page refreshes hourly from a static cache; it holds no database and makes no projections.
+      These are small numbers presented honestly — the point is the mechanism, and that you can check it.</p>
+  </div>
+
+  <footer>
+    <span>Aleph Cloud · decentralized compute</span>
+    <span id="foot-fresh"></span>
+  </footer>
+</main>
+
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const ES_TX = (h) => `https://etherscan.io/tx/${h}`;
+
+const fmtUsd = (v, dp = 0) => "$" + v.toLocaleString("en-US", { minimumFractionDigits: dp, maximumFractionDigits: dp });
+const fmtNum = (v, dp = 0) => v.toLocaleString("en-US", { minimumFractionDigits: dp, maximumFractionDigits: dp });
+const fmtAleph = (v) => !v ? "0" : v >= 1e6 ? fmtNum(v / 1e6, 2) + "M" : v >= 1e4 ? fmtNum(v / 1e3, 1) + "K" : fmtNum(v, v < 100 ? 1 : 0);
+const fmtDate = (ms) => new Date(ms).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+const monthLabel = (m) => new Date(m + "-15").toLocaleDateString("en-GB", { month: "short", year: "2-digit" }).replace(" ", " ’");
+const shortHash = (h) => h ? h.slice(0, 8) + "…" + h.slice(-6) : "—";
+
+function ago(iso) {
+  const mins = Math.round((Date.now() - new Date(iso).getTime()) / 60000);
+  if (mins < 2) return "just now";
+  if (mins < 90) return `${mins} min ago`;
+  const h = Math.round(mins / 60);
+  return h < 36 ? `${h} h ago` : `${Math.round(h / 24)} days ago`;
+}
+
+function renderChart(monthly) {
+  const W = 960, H = 300, PAD = { l: 64, r: 64, t: 16, b: 34 };
+  const iw = W - PAD.l - PAD.r, ih = H - PAD.t - PAD.b;
+  const n = monthly.length;
+  const slot = iw / Math.max(n, 1), bw = Math.min(26, slot * .32);
+  const maxUsd = Math.max(...monthly.map(m => m.usd || 0), 1);
+  const maxAleph = Math.max(...monthly.map(m => m.alephDistributed || 0), 1);
+  const yU = v => ih - (v / maxUsd) * ih;
+  const yA = v => ih - (v / maxAleph) * ih;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Monthly credits purchased and ALEPH distributed" style="width:100%;height:auto">`;
+  // gridlines
+  for (let g = 0; g <= 3; g++) {
+    const y = PAD.t + (ih / 3) * g;
+    s += `<line x1="${PAD.l}" x2="${W - PAD.r}" y1="${y}" y2="${y}" stroke="#c9bfa9" stroke-width="${g === 3 ? 1.4 : .6}" ${g < 3 ? 'stroke-dasharray="2 5"' : ""}/>`;
+    s += `<text x="${PAD.l - 10}" y="${y + 4}" text-anchor="end" font-size="10.5" fill="#8d8474">${fmtUsd(maxUsd * (1 - g / 3))}</text>`;
+    s += `<text x="${W - PAD.r + 10}" y="${y + 4}" font-size="10.5" fill="#8d8474">${fmtAleph(maxAleph * (1 - g / 3))}</text>`;
+  }
+  monthly.forEach((m, i) => {
+    const cx = PAD.l + slot * i + slot / 2;
+    if (m.usd) {
+      const y = PAD.t + yU(m.usd);
+      s += `<rect class="bar" x="${cx - bw - 2}" y="${y}" width="${bw}" height="${ih - yU(m.usd)}" fill="#176d3e"><title>${monthLabel(m.month)} — ${fmtUsd(m.usd, 2)} purchased (${m.purchases} purchases)</title></rect>`;
+      s += `<text x="${cx - bw / 2 - 2}" y="${y - 6}" text-anchor="middle" font-size="10" fill="#176d3e">${fmtUsd(m.usd)}</text>`;
+    }
+    if (m.alephDistributed) {
+      const y = PAD.t + yA(m.alephDistributed);
+      s += `<rect class="bar" x="${cx + 2}" y="${y}" width="${bw}" height="${ih - yA(m.alephDistributed)}" fill="#0e62fe"><title>${monthLabel(m.month)} — ${fmtAleph(m.alephDistributed)} ALEPH distributed</title></rect>`;
+      s += `<text x="${cx + bw / 2 + 2}" y="${y - 6}" text-anchor="middle" font-size="10" fill="#0e62fe">${fmtAleph(m.alephDistributed)}</text>`;
+    }
+    s += `<text x="${cx}" y="${H - 12}" text-anchor="middle" font-size="11" fill="#5d564a">${monthLabel(m.month)}</text>`;
+  });
+  s += `<text x="${PAD.l}" y="${H - 1}" font-size="9.5" fill="#8d8474">left axis: USD</text>`;
+  s += `<text x="${W - PAD.r}" y="${H - 1}" text-anchor="end" font-size="9.5" fill="#8d8474">right axis: ALEPH</text>`;
+  $("chart").innerHTML = s + "</svg>";
+}
+
+function render(d) {
+  // freshness — never silently stale
+  const ageH = (Date.now() - new Date(d.generatedAt).getTime()) / 36e5;
+  $("freshness").innerHTML = `<span class="dot"></span>data ${ago(d.generatedAt)}`;
+  $("foot-fresh").textContent = `cache generated ${new Date(d.generatedAt).toUTCString()} · block ${fmtNum(d.chain.lastScannedBlock)}`;
+  if (ageH > 24) {
+    const b = $("stale-banner");
+    b.style.display = "block";
+    b.textContent = `⚠ This cache is ${Math.round(ageH)} hours old — the refresh pipeline may be down. Figures below are accurate as of generation time, not now.`;
+  }
+
+  $("c-usd").textContent = fmtUsd(d.credits.totalUsd, 0);
+  $("c-usd-sub").textContent = `${fmtNum(d.credits.completedPurchases)} purchases since ${fmtDate(d.credits.firstPurchaseAt)} · net of bonus credits`;
+  $("c-bought").textContent = fmtAleph(d.chain.alephMarketBought);
+  $("c-dist").textContent = fmtAleph(d.chain.alephDistributed);
+  $("c-burned").textContent = fmtAleph(d.chain.alephBurned);
+
+  renderChart(d.monthly);
+
+  const runs = [...d.chain.events].sort((a, b) => b.blockNumber - a.blockNumber);
+  $("runs-note").textContent = `${runs.length} runs · every row is one event`;
+  $("runs-body").innerHTML = runs.map(e => `<tr>
+    <td>${fmtDate(e.timestamp)}</td>
+    <td>${e.tokenSymbol}</td>
+    <td class="num">${fmtNum(e.amountIn, 2)}</td>
+    <td class="num">${fmtAleph(e.alephReceived)}</td>
+    <td class="num">${fmtAleph(e.alephToDistribution)}</td>
+    <td class="num hide-sm">${e.alephBurned ? fmtAleph(e.alephBurned) : '<span class="muted">0</span>'}</td>
+    <td>${e.marketBuy ? '<span class="tag buy">market buy</span>' : '<span class="tag pass">direct ALEPH</span>'}</td>
+    <td class="hash"><a href="${ES_TX(e.txHash)}" rel="noopener">${shortHash(e.txHash)}</a></td>
+  </tr>`).join("") || `<tr><td colspan="8" class="muted">No processing runs yet.</td></tr>`;
+
+  $("purchases-note").textContent = `${d.credits.completedPurchases} completed · showing latest ${d.credits.latest.length}`;
+  $("purchases-body").innerHTML = d.credits.latest.map(p => `<tr>
+    <td>${fmtDate(p.createdAt)}</td>
+    <td>${p.chain}</td>
+    <td>${p.currency}</td>
+    <td class="num">${fmtUsd(p.usd, 2)}</td>
+    <td class="num hide-sm">${fmtNum(p.credits)}</td>
+    <td class="hash">${p.txHash && p.chain === "ethereum" ? `<a href="${ES_TX(p.txHash)}" rel="noopener">${shortHash(p.txHash)}</a>` : `<span class="muted">${shortHash(p.txHash)}</span>`}</td>
+  </tr>`).join("");
+
+  $("method-lede").textContent =
+    `Methodology — everything on this page is reproducible from two public sources; the pipeline is open and the cache is a flat JSON file.`;
+  $("ledger").style.display = "block";
+}
+
+fetch("./data/flow.json", { cache: "no-store" })
+  .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+  .then(render)
+  .catch(() => {
+    // Honesty guardrail: never render zeros on fetch failure.
+    $("error-state").style.display = "block";
+    $("freshness").innerHTML = `<span class="dot" style="background:var(--burn)"></span><span style="color:var(--burn)">data unavailable</span>`;
+  });
+</script>
+</body>
+</html>
