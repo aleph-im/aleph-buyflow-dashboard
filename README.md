@@ -54,8 +54,15 @@ payments no swap occurs (`marketBuy: false`, not counted as market-bought).
 
 ## Deploy
 
-Push to GitHub, enable Pages (source: GitHub Actions). The hourly workflow
-refreshes `web/data/flow.json`, commits it, and redeploys. Intended final home:
-`network.aleph.cloud/revenue` or `aleph.cloud/token/flow` — until then GitHub
-Pages serves as staging. Instant-v0 alternative per spec: a Dune dashboard on
-`ethereum.logs` for the contract.
+The hourly workflow refreshes `web/data/flow.json`, commits it, and deploys to
+two targets:
+
+1. **Aleph Cloud web3 hosting** (canonical, dogfood) — `web/` is pinned to
+   IPFS via [`aleph-im/web3-hosting-action`](https://github.com/aleph-im/web3-hosting-action)
+   and linked to **flow.aleph.cloud**. Uses the `ALEPH_PRIVATE_KEY` repo secret
+   (dedicated deploy wallet `0x246B97e5Ce59E445C6206cE5BB8663e2Bae06a50`).
+   Required DNS at the `aleph.cloud` zone (OVH):
+   - `flow` CNAME → `ipfs.public.aleph.sh.`
+   - `_control.flow` TXT → `0x246B97e5Ce59E445C6206cE5BB8663e2Bae06a50`
+2. **GitHub Pages** (mirror/staging) —
+   https://aleph-im.github.io/aleph-buyflow-dashboard/
