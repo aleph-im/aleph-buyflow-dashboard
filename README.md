@@ -66,3 +66,16 @@ two targets:
    - `_control.flow` TXT → `0x246B97e5Ce59E445C6206cE5BB8663e2Bae06a50`
 2. **GitHub Pages** (mirror/staging) —
    https://aleph-im.github.io/aleph-buyflow-dashboard/
+3. **Aleph aggregate** (data contract for other consumers, e.g. the network
+   dashboard) — the flow data, minus run timestamps and rounded to 6 decimals,
+   is published as a signed aggregate under the deploy wallet, **only when the
+   content changes** (`pipeline/publish-aggregate.mjs` diffs against the live
+   aggregate first):
+
+   ```
+   https://api2.aleph.im/api/v0/aggregates/0x246B97e5Ce59E445C6206cE5BB8663e2Bae06a50.json?keys=buyflow
+   ```
+
+   Freshness semantics: the aggregate updates on distributions/buys, not on a
+   clock — use `web/data/flow.json`'s `generatedAt` (refreshed hourly) to
+   check pipeline liveness.

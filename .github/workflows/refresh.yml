@@ -40,6 +40,22 @@ jobs:
           git diff --cached --quiet || git commit -m "data: refresh flow.json"
           git push
 
+      # Pinned release binary, installed in a step with no secrets in env.
+      - name: Install aleph CLI
+        run: |
+          curl -fsSL -o /usr/local/bin/aleph \
+            https://github.com/aleph-im/aleph-rs/releases/download/v0.12.0/aleph-cli-linux-x86_64
+          chmod +x /usr/local/bin/aleph
+          aleph --version
+
+      # Signed mirror of the data on the Aleph network (key "buyflow" under
+      # the deploy wallet). Reads the live aggregate first and only posts a
+      # message when the content actually changed.
+      - name: Publish Aleph aggregate (skips if unchanged)
+        env:
+          ALEPH_PRIVATE_KEY: ${{ secrets.ALEPH_PRIVATE_KEY }}
+        run: node pipeline/publish-aggregate.mjs
+
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
