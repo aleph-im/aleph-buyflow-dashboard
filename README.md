@@ -51,9 +51,6 @@ payments no swap occurs (`marketBuy: false`, not counted as market-bought).
   2 processing runs as of 2026-06-10). Copy stays mechanism-first; no
   "massive buy pressure" language.
 - **Burn lever shown explicitly**: "burn 0% — governance lever, unactivated".
-- **Launch gate (P0-01):** do not announce/link publicly until Credit API
-  uptime is fixed. The hourly workflow can run before that; publishing the URL
-  is the gated step.
 
 ## Deploy
 
