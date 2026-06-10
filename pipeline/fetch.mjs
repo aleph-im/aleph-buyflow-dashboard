@@ -41,7 +41,7 @@ const KNOWN_TOKENS = {
 };
 
 let rpcId = 0;
-async function rpc(method, params) {
+async function rpcOnce(method, params) {
   const res = await fetch(CONFIG.rpcUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -51,6 +51,19 @@ async function rpc(method, params) {
   const body = await res.json();
   if (body.error) throw new Error(`RPC error for ${method}: ${JSON.stringify(body.error)}`);
   return body.result;
+}
+
+// Public RPCs are load-balanced across nodes that can disagree by a few
+// blocks; retry transient failures with backoff.
+async function rpc(method, params, attempts = 3) {
+  for (let i = 1; ; i++) {
+    try {
+      return await rpcOnce(method, params);
+    } catch (err) {
+      if (i >= attempts) throw err;
+      await new Promise((r) => setTimeout(r, 1500 * i));
+    }
+  }
 }
 
 const hex = (n) => "0x" + n.toString(16);
@@ -78,7 +91,9 @@ async function tokenInfo(address, cache) {
 }
 
 async function fetchChainEvents(previous) {
-  const latestBlock = Number(BigInt(await rpc("eth_blockNumber", [])));
+  // Stay a few blocks behind head: other nodes behind the same balancer may
+  // not have it yet ("block range extends beyond current head block").
+  const latestBlock = Number(BigInt(await rpc("eth_blockNumber", []))) - 5;
   const fromBlock = previous?.chain?.lastScannedBlock
     ? previous.chain.lastScannedBlock + 1
     : CONFIG.deployBlock;
