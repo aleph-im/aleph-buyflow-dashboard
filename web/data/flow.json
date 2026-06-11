@@ -1,24 +1,33 @@
 {
  "schemaVersion": 1,
- "generatedAt": "2026-06-11T11:50:25.778Z",
+ "generatedAt": "2026-06-11T16:29:36.850Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "credits": {
-  "totalUsd": 1670.2273899999996,
-  "totalCredits": 1918434841,
-  "completedPurchases": 86,
+  "totalUsd": 1739.2273899999996,
+  "totalCredits": 1987434841,
+  "completedPurchases": 87,
   "firstPurchaseAt": 1766398192879,
-  "lastPurchaseAt": 1780834072699,
+  "lastPurchaseAt": 1781100066670,
   "byCurrency": {
+   "USDC": {
+    "purchases": 31,
+    "usd": 498
+   },
    "ALEPH": {
     "purchases": 56,
     "usd": 1241.2273899999998
-   },
-   "USDC": {
-    "purchases": 30,
-    "usd": 429
    }
   },
   "latest": [
+   {
+    "createdAt": 1781100066670,
+    "chain": "ethereum",
+    "currency": "USDC",
+    "provider": "WALLET",
+    "usd": 69,
+    "credits": 69000000,
+    "txHash": "0x0674d40875b6c72f532c2a247fa3faaf363e3e10c3b8b59b07366bca60399a19"
+   },
    {
     "createdAt": 1780834072699,
     "chain": "ethereum",
@@ -144,24 +153,15 @@
     "usd": 0.8392879999999999,
     "credits": 1007145,
     "txHash": "0x297db9dcf01f636cf065e987b191ba572b22a914d8c3b026eef2116cb2cb722c"
-   },
-   {
-    "createdAt": 1780151500222,
-    "chain": "ethereum",
-    "currency": "ALEPH",
-    "provider": "WALLET",
-    "usd": 0.8392879999999999,
-    "credits": 1007145,
-    "txHash": "0x2d115b1be35769c2729ebd250b525e93404e60e726cf4cde0c129b565f9cd1e5"
    }
   ]
  },
  "chain": {
-  "lastScannedBlock": 25294022,
+  "lastScannedBlock": 25295412,
   "deployBlock": 24270182,
-  "processingRuns": 2,
+  "processingRuns": 3,
   "alephMarketBought": 8356.858003546597,
-  "alephDistributed": 1503672.0580035467,
+  "alephDistributed": 1513135.9580035466,
   "alephBurned": 0,
   "burnActivated": false,
   "events": [
@@ -200,6 +200,24 @@
     "swapVersion": 4,
     "isStable": true,
     "marketBuy": true
+   },
+   {
+    "blockNumber": 25295060,
+    "timestamp": 1781191055000,
+    "txHash": "0xfff8d75a960d02e3c5cc3346b0e48c2ffb1712098678fccdfc58ed45d8f99e5b",
+    "token": "0x27702a26126e0b3702af63ee09ac4d1a084ef628",
+    "tokenSymbol": "ALEPH",
+    "sender": "0xc870b0ca4b3d65f33e2a3c732ab3cd2ae555b14e",
+    "amountIn": 9962,
+    "swapAmountIn": 0,
+    "alephReceived": 9962,
+    "alephBurned": 0,
+    "alephToDistribution": 9463.900000000001,
+    "toDevelopers": 498.1,
+    "toDevelopersToken": "ALEPH",
+    "swapVersion": 0,
+    "isStable": false,
+    "marketBuy": false
    }
   ]
  },
@@ -242,11 +260,11 @@
   },
   {
    "month": "2026-06",
-   "usd": 184.056061,
-   "purchases": 8,
-   "credits": 212867269,
+   "usd": 253.05606100000003,
+   "purchases": 9,
+   "credits": 281867269,
    "alephBought": 8356.858003546597,
-   "alephDistributed": 1503672.0580035467,
+   "alephDistributed": 1513135.9580035466,
    "alephBurned": 0
   }
  ]
