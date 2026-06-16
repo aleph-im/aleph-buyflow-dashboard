@@ -73,15 +73,27 @@ if (current && deepEqual(current, next)) {
   process.exit(0);
 }
 
-const args = ["aggregate", "create", "--key", KEY, "--json"];
-// aleph CLI ≥0.12.0 requires --chain when signing with --private-key; the
-// deploy wallet is an Ethereum (0x) address.
+// aleph CLI ≥0.12.0 split create/edit: `create` refuses to overwrite an
+// existing key, so once the aggregate exists we must use `edit` to update it.
+// Differences vs create: edit takes content via --content (it ignores stdin
+// and would open $EDITOR otherwise), needs -y to skip the confirm prompt in
+// CI, and posts a merge-patch (removed subkeys are nulled — fine, we always
+// send the full desired payload).
+const exists = current != null;
+const verb = exists ? "edit" : "create";
+const args = ["aggregate", verb, "--key", KEY, "--content", JSON.stringify(next), "--json"];
+if (exists) args.push("-y"); // skip edit's confirm prompt in CI
+// --chain is required when signing with --private-key; the deploy wallet is
+// an Ethereum (0x) address.
 if (process.env.ALEPH_PRIVATE_KEY) args.push("--chain", "eth");
 else args.push("--account", "buyflow-deploy");
-const res = spawnSync("aleph", args, { input: JSON.stringify(next), encoding: "utf8" });
+const res = spawnSync("aleph", args, { encoding: "utf8" });
 if (res.status !== 0) {
   console.error(res.stdout, res.stderr);
-  throw new Error(`aleph aggregate create failed (exit ${res.status})`);
+  throw new Error(`aleph aggregate ${verb} failed (exit ${res.status})`);
 }
-const out = JSON.parse(res.stdout);
-console.log(`aggregate published: ${out.item_hash} (status ${out.message_status})`);
+const out = res.stdout.trim() ? JSON.parse(res.stdout) : {};
+console.log(
+  `aggregate ${verb === "edit" ? "updated" : "published"}: ` +
+    `${out.item_hash ?? "(no change)"} (status ${out.message_status ?? "n/a"})`,
+);
