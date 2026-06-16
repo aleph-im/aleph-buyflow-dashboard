@@ -1,6 +1,6 @@
 {
  "schemaVersion": 1,
- "generatedAt": "2026-06-16T07:50:31.833Z",
+ "generatedAt": "2026-06-16T07:53:41.442Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "credits": {
   "totalUsd": 4522.438109000003,
@@ -157,7 +157,7 @@
   ]
  },
  "chain": {
-  "lastScannedBlock": 25328691,
+  "lastScannedBlock": 25328706,
   "deployBlock": 24270182,
   "processingRuns": 5,
   "alephMarketBought": 8356.858003546597,
