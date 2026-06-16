@@ -70,18 +70,3 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
-
-  deploy-aleph:
-    needs: refresh
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main # include the data commit the refresh job just pushed
-
-      - name: Deploy on Aleph Cloud
-        uses: aleph-im/web3-hosting-action@v2.1.0
-        with:
-          path: web
-          private-key: ${{ secrets.ALEPH_PRIVATE_KEY }}
-          domain: flow.aleph.cloud
