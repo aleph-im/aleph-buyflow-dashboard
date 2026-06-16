@@ -74,7 +74,10 @@ if (current && deepEqual(current, next)) {
 }
 
 const args = ["aggregate", "create", "--key", KEY, "--json"];
-if (!process.env.ALEPH_PRIVATE_KEY) args.push("--account", "buyflow-deploy");
+// aleph CLI ≥0.12.0 requires --chain when signing with --private-key; the
+// deploy wallet is an Ethereum (0x) address.
+if (process.env.ALEPH_PRIVATE_KEY) args.push("--chain", "eth");
+else args.push("--account", "buyflow-deploy");
 const res = spawnSync("aleph", args, { input: JSON.stringify(next), encoding: "utf8" });
 if (res.status !== 0) {
   console.error(res.stdout, res.stderr);
