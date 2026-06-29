@@ -30,7 +30,7 @@ const CONFIG = {
   deployBlock: 24270182, // ~2026-01-19
   // keccak256("TokenPaymentsProcessed(address,address,uint256,uint256,uint256,uint256,uint256,uint256,uint8,bool)")
   topicTokenPaymentsProcessed: "0x3db36cd2496ef869c223c05bc35ff9785f5cc1ffeca2b221d884488c4282cbbc",
-  logChunkSize: 49000, // public RPC caps eth_getLogs ranges at 50k blocks
+  logChunkSize: 10000, // capped to keep eth_getLogs responses under the endpoint's payload limit (HTTP 413)
   schemaVersion: 1,
 };
 

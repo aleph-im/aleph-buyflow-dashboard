@@ -30,7 +30,7 @@ jobs:
       - name: Run pipeline
         run: node pipeline/fetch.mjs
         env:
-          ETH_RPC_URL: ${{ vars.ETH_RPC_URL || 'https://ethereum-rpc.publicnode.com' }}
+          ETH_RPC_URL: ${{ secrets.ETH_RPC_URL || 'https://ethereum-rpc.publicnode.com' }}
 
       - name: Commit updated cache
         run: |
