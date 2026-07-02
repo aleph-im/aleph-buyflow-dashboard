@@ -7,6 +7,14 @@
  *  2. TokenPaymentsProcessed events from the AlephPaymentProcessor contract
  *     on Ethereum mainnet (market-buy + burn + distribution per processing run).
  *
+ * Revenue definition: the headline (`revenue.totalUsd`) counts every payment
+ * the processor processed, valued in USD — NOT just Credit-API purchases.
+ * Most revenue reaches the contract as direct ALEPH transfers (consolidated
+ * PAYG and off-API payments), which the Credit API never sees; counting only
+ * `credits.totalUsd` badly understates it. ALEPH amounts are valued at the
+ * platform's own rate (credit_price_usdc / credit_price_aleph) nearest in
+ * time; stables at face value.
+ *
  * Writes a single static JSON cache (web/data/flow.json) consumed by the
  * static frontend. No database.
  *
@@ -161,12 +169,55 @@ function monthOf(tsMillis) {
   return new Date(tsMillis).toISOString().slice(0, 7); // YYYY-MM
 }
 
+// ALEPH/USD rate implied by each credit purchase (credit_price_usdc /
+// credit_price_aleph) — the platform's own conversion rate at that moment.
+// Lets us value direct-ALEPH payments in USD without an external price feed.
+function buildAlephUsdRates(payments) {
+  return payments
+    .filter(
+      (p) =>
+        p.status === "COMPLETED" &&
+        p.prices?.credit_price_aleph > 0 &&
+        p.prices?.credit_price_usdc > 0,
+    )
+    .map((p) => ({ t: p.created_at, rate: p.prices.credit_price_usdc / p.prices.credit_price_aleph }))
+    .sort((a, b) => a.t - b.t);
+}
+
+function nearestAlephUsd(rates, ts) {
+  if (!rates.length) return null;
+  let lo = 0;
+  let hi = rates.length - 1;
+  while (lo < hi) {
+    const mid = (lo + hi) >> 1;
+    if (rates[mid].t < ts) lo = mid + 1;
+    else hi = mid;
+  }
+  const prev = rates[lo - 1];
+  const best = prev && Math.abs(prev.t - ts) < Math.abs(rates[lo].t - ts) ? prev : rates[lo];
+  return best.rate;
+}
+
 function aggregate(payments, chainEvents, latestBlock) {
   const completed = payments.filter((p) => p.status === "COMPLETED" && p.prices);
 
   // USD actually paid = credits granted minus bonus, at the USD credit price.
   const usdOf = (p) =>
     (p.prices.credit_amount - (p.prices.credit_bonus_amount ?? 0)) * p.prices.credit_price_usdc;
+
+  // Network revenue = USD value of every payment the processor processed.
+  // Credit-API purchases are only a subset of what reaches the contract —
+  // consolidated PAYG and off-API revenue arrive as direct ALEPH transfers —
+  // so the headline is valued from the on-chain runs themselves: stables at
+  // face value, ALEPH amounts at the platform's own rate at processing time.
+  const alephUsdRates = buildAlephUsdRates(payments);
+  const usdValueOf = (e) => {
+    if (e.isStable) return e.amountIn;
+    const rate = nearestAlephUsd(alephUsdRates, e.timestamp);
+    if (rate == null) return null;
+    return (e.tokenSymbol === "ALEPH" ? e.amountIn : e.alephReceived) * rate;
+  };
+  const events = chainEvents.map((e) => ({ ...e, usdValue: usdValueOf(e) }));
 
   const byMonth = {};
   for (const p of completed) {
@@ -176,9 +227,10 @@ function aggregate(payments, chainEvents, latestBlock) {
     byMonth[m].purchases += 1;
     byMonth[m].credits += p.prices.credit_amount;
   }
-  for (const e of chainEvents) {
+  for (const e of events) {
     const m = monthOf(e.timestamp);
     byMonth[m] ??= { month: m, usd: 0, purchases: 0, credits: 0 };
+    byMonth[m].processedUsd = (byMonth[m].processedUsd ?? 0) + (e.usdValue ?? 0);
     byMonth[m].alephBought = (byMonth[m].alephBought ?? 0) + (e.marketBuy ? e.alephReceived : 0);
     byMonth[m].alephDistributed = (byMonth[m].alephDistributed ?? 0) + e.alephToDistribution;
     byMonth[m].alephBurned = (byMonth[m].alephBurned ?? 0) + e.alephBurned;
@@ -197,6 +249,12 @@ function aggregate(payments, chainEvents, latestBlock) {
     schemaVersion: CONFIG.schemaVersion,
     generatedAt: new Date().toISOString(),
     contract: CONFIG.contract,
+    revenue: {
+      totalUsd: sum(events, (e) => e.usdValue ?? 0),
+      alephProcessed: sum(events, (e) => (e.tokenSymbol === "ALEPH" ? e.amountIn : e.alephReceived)),
+      // Honesty surface: runs we could not value (no rate available).
+      unpricedRuns: events.filter((e) => e.usdValue == null).length,
+    },
     credits: {
       totalUsd: sum(completed, usdOf),
       totalCredits: sum(completed, (p) => p.prices.credit_amount),
@@ -220,12 +278,13 @@ function aggregate(payments, chainEvents, latestBlock) {
     chain: {
       lastScannedBlock: latestBlock,
       deployBlock: CONFIG.deployBlock,
-      processingRuns: chainEvents.length,
-      alephMarketBought: sum(chainEvents, (e) => (e.marketBuy ? e.alephReceived : 0)),
-      alephDistributed: sum(chainEvents, (e) => e.alephToDistribution),
-      alephBurned: sum(chainEvents, (e) => e.alephBurned),
-      burnActivated: chainEvents.some((e) => e.alephBurned > 0),
-      events: chainEvents,
+      processingRuns: events.length,
+      processedUsd: sum(events, (e) => e.usdValue ?? 0),
+      alephMarketBought: sum(events, (e) => (e.marketBuy ? e.alephReceived : 0)),
+      alephDistributed: sum(events, (e) => e.alephToDistribution),
+      alephBurned: sum(events, (e) => e.alephBurned),
+      burnActivated: events.some((e) => e.alephBurned > 0),
+      events,
     },
     monthly: Object.values(byMonth).sort((a, b) => a.month.localeCompare(b.month)),
   };
@@ -257,8 +316,9 @@ async function main() {
   mkdirSync(dirname(OUT_PATH), { recursive: true });
   writeFileSync(OUT_PATH, JSON.stringify(out, null, 1) + "\n");
   console.log(
-    `ok: ${out.credits.completedPurchases} purchases ($${out.credits.totalUsd.toFixed(2)}), ` +
-      `${out.chain.processingRuns} processing runs, scanned to block ${latestBlock}`,
+    `ok: revenue $${out.revenue.totalUsd.toFixed(2)} across ${out.chain.processingRuns} processing runs ` +
+      `(${out.credits.completedPurchases} credit purchases: $${out.credits.totalUsd.toFixed(2)}), ` +
+      `scanned to block ${latestBlock}`,
   );
 }
 

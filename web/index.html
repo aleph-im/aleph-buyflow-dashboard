@@ -242,10 +242,11 @@ footer .info-label { color: var(--faint); }
   </div>
   <h1 class="rise" style="animation-delay:.08s">Watch the cloud <span class="grad">buy ALEPH.</span></h1>
   <p class="standfirst rise" style="animation-delay:.16s">
-    Every compute credit bought on Aleph Cloud is settled through an on-chain payment processor:
-    non-ALEPH payments are <strong>market-bought into ALEPH</strong>, then split between network
-    distribution, development, and an <strong>optional burn</strong>. This page is the unedited
-    ledger of that mechanism — small numbers, real provenance. Verify every line on Etherscan.
+    Every payment to Aleph Cloud — credit purchases and consolidated pay-as-you-go revenue —
+    is settled through an on-chain payment processor: non-ALEPH payments are
+    <strong>market-bought into ALEPH</strong>, then split between network distribution,
+    development, and an <strong>optional burn</strong>. This page is the unedited ledger of
+    that mechanism — real provenance. Verify every line on Etherscan.
   </p>
 
   <div class="flow-strip card rise" style="animation-delay:.24s" aria-label="Flow of funds">
@@ -269,7 +270,7 @@ footer .info-label { color: var(--faint); }
 
   <div class="counters">
     <div class="counter card green">
-      <span class="info-label">Credits purchased</span>
+      <span class="info-label">Network revenue (USD)</span>
       <span class="big" id="c-usd">—</span>
       <span class="sub" id="c-usd-sub"></span>
     </div>
@@ -314,7 +315,7 @@ footer .info-label { color: var(--faint); }
     <div class="table-card card">
     <table>
       <thead><tr>
-        <th>Date</th><th>Paid in</th><th class="num">Amount in</th><th class="num">ALEPH out</th>
+        <th>Date</th><th>Paid in</th><th class="num">Amount in</th><th class="num">≈ USD</th><th class="num">ALEPH out</th>
         <th class="num">→ Network</th><th class="num hide-sm">→ Burn</th><th>Type</th><th>Proof</th>
       </tr></thead>
       <tbody id="runs-body"></tbody>
@@ -344,6 +345,11 @@ footer .info-label { color: var(--faint); }
       (<a href="https://etherscan.io/address/0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B" rel="noopener">Etherscan</a>).
       On-chain figures are decoded from <code>TokenPaymentsProcessed</code> events — one event per processing
       run, carrying the swap, burn and distribution amounts. Nothing here is self-reported.</p>
+    <p><strong>Revenue.</strong> The headline counts every payment processed by the contract —
+      not just credit purchases. Most revenue reaches the processor as direct ALEPH transfers
+      (consolidated pay-as-you-go and off-API payments). Stable-coin amounts count at face value;
+      ALEPH amounts are valued at the platform's own credit-pricing rate nearest to the processing
+      time, so no external price feed is involved.</p>
     <p><strong>Credits.</strong> Purchase data comes from the public Credit API
       (<a href="https://credit.aleph.im/api/v0/payment" rel="noopener"><code>credit.aleph.im/api/v0/payment</code></a>).
       Credits are denominated at <strong>1,000,000 credits = $1</strong>; USD-paid figures count what buyers
@@ -440,10 +446,10 @@ function render(d) {
     b.textContent = `⚠ This cache is ${Math.round(ageH)} hours old — the refresh pipeline may be down. Figures below are accurate as of generation time, not now.`;
   }
 
-  $("c-usd").textContent = fmtUsd(d.credits.totalUsd, 0);
+  $("c-usd").textContent = fmtUsd(d.revenue?.totalUsd ?? d.credits.totalUsd, 0);
   $("c-usd-sub").textContent =
-    `${fmtNum(d.credits.completedPurchases)} purchases since ${fmtDate(d.credits.firstPurchaseAt)} · ` +
-    `${fmtCompact(d.credits.totalCredits)} credits issued ≈ ${creditsUsd(d.credits.totalCredits)} incl. bonus`;
+    `all payments processed on-chain · credit purchases: ${fmtUsd(d.credits.totalUsd, 0)} ` +
+    `(${fmtNum(d.credits.completedPurchases)}) since ${fmtDate(d.credits.firstPurchaseAt)}`;
   $("c-bought").textContent = fmtAleph(d.chain.alephMarketBought);
   $("c-dist").textContent = fmtAleph(d.chain.alephDistributed);
   $("c-burned").textContent = fmtAleph(d.chain.alephBurned);
@@ -456,12 +462,13 @@ function render(d) {
     <td>${fmtDate(e.timestamp)}</td>
     <td>${e.tokenSymbol}</td>
     <td class="num">${fmtNum(e.amountIn, 2)}</td>
+    <td class="num">${e.usdValue != null ? fmtUsd(e.usdValue, 0) : '<span class="muted">—</span>'}</td>
     <td class="num">${fmtAleph(e.alephReceived)}</td>
     <td class="num">${fmtAleph(e.alephToDistribution)}</td>
     <td class="num hide-sm">${e.alephBurned ? fmtAleph(e.alephBurned) : '<span class="muted">0</span>'}</td>
     <td>${e.marketBuy ? '<span class="tag buy">market buy</span>' : '<span class="tag pass">direct ALEPH</span>'}</td>
     <td class="hash"><a href="${ES_TX(e.txHash)}" rel="noopener">${shortHash(e.txHash)}</a></td>
-  </tr>`).join("") || `<tr><td colspan="8" class="muted">No processing runs yet.</td></tr>`;
+  </tr>`).join("") || `<tr><td colspan="9" class="muted">No processing runs yet.</td></tr>`;
 
   $("purchases-note").textContent = `${d.credits.completedPurchases} completed · showing latest ${d.credits.latest.length}`;
   $("purchases-body").innerHTML = d.credits.latest.map(p => `<tr>
