@@ -31,8 +31,17 @@ import { fileURLToPath } from "node:url";
 
 const OUT_PATH = join(dirname(fileURLToPath(import.meta.url)), "..", "web", "data", "flow.json");
 
+// Keyless public endpoints tried in order — publicnode started requiring a
+// token for heavier eth_getLogs calls (HTTP 403), which silently killed the
+// hourly refresh, so never depend on a single provider.
+const RPC_URLS = [
+  ...(process.env.ETH_RPC_URL ? [process.env.ETH_RPC_URL] : []),
+  "https://ethereum-rpc.publicnode.com",
+  "https://rpc.flashbots.net",
+  "https://eth.merkle.io",
+];
+
 const CONFIG = {
-  rpcUrl: process.env.ETH_RPC_URL || "https://ethereum-rpc.publicnode.com",
   creditApi: process.env.CREDIT_API_URL || "https://credit.aleph.im",
   contract: "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
   deployBlock: 24270182, // ~2026-01-19
@@ -49,8 +58,8 @@ const KNOWN_TOKENS = {
 };
 
 let rpcId = 0;
-async function rpcOnce(method, params) {
-  const res = await fetch(CONFIG.rpcUrl, {
+async function rpcOnce(url, method, params) {
+  const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ jsonrpc: "2.0", id: ++rpcId, method, params }),
@@ -62,13 +71,18 @@ async function rpcOnce(method, params) {
 }
 
 // Public RPCs are load-balanced across nodes that can disagree by a few
-// blocks; retry transient failures with backoff.
-async function rpc(method, params, attempts = 3) {
+// blocks (transient failures), and providers change access policies
+// (persistent failures) — retry with backoff AND rotate endpoints.
+let rpcUrlIdx = 0;
+async function rpc(method, params, attempts = 2 * RPC_URLS.length) {
   for (let i = 1; ; i++) {
+    const url = RPC_URLS[rpcUrlIdx % RPC_URLS.length];
     try {
-      return await rpcOnce(method, params);
+      return await rpcOnce(url, method, params);
     } catch (err) {
       if (i >= attempts) throw err;
+      console.warn(`RPC ${url} failed (${err.message}), rotating endpoint`);
+      rpcUrlIdx++; // stick with the next endpoint until it also fails
       await new Promise((r) => setTimeout(r, 1500 * i));
     }
   }
