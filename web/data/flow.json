@@ -1,29 +1,56 @@
 {
  "schemaVersion": 1,
- "generatedAt": "2026-07-04T11:46:55.865Z",
+ "generatedAt": "2026-07-07T17:28:58.714Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
-  "totalUsd": 69402.03248496055,
-  "alephProcessed": 5317098.8580035465,
+  "totalUsd": 69408.93288732063,
+  "alephProcessed": 5317738.8580035465,
   "unpricedRuns": 0
  },
  "credits": {
-  "totalUsd": 4658.263992000003,
-  "totalCredits": 5487478761,
-  "completedPurchases": 94,
+  "totalUsd": 4680.386207000002,
+  "totalCredits": 5510765418,
+  "completedPurchases": 97,
   "firstPurchaseAt": 1766398192879,
-  "lastPurchaseAt": 1783121583646,
+  "lastPurchaseAt": 1783394842078,
   "byCurrency": {
    "ALEPH": {
-    "purchases": 61,
-    "usd": 4146.263992000002
+    "purchases": 62,
+    "usd": 4152.086207000002
    },
    "USDC": {
-    "purchases": 33,
-    "usd": 512
+    "purchases": 35,
+    "usd": 528.3
    }
   },
   "latest": [
+   {
+    "createdAt": 1783394842078,
+    "chain": "ethereum",
+    "currency": "ALEPH",
+    "provider": "WALLET",
+    "usd": 5.822215,
+    "credits": 6986657,
+    "txHash": "0x08f356ac4a61b45e0faac4c83dd7877259d7a69507b23597c8cce04e62ed0a30"
+   },
+   {
+    "createdAt": 1783379572647,
+    "chain": "ethereum",
+    "currency": "USDC",
+    "provider": "WALLET",
+    "usd": 1.3,
+    "credits": 1300000,
+    "txHash": "0x3d2d408a5fde136615801fb1319bb76ef45cade6b877eda02081236b138a0051"
+   },
+   {
+    "createdAt": 1783337276985,
+    "chain": "ethereum",
+    "currency": "USDC",
+    "provider": "WALLET",
+    "usd": 15,
+    "credits": 15000000,
+    "txHash": "0xe7ec7b960cad1cd58041dec2fea9bd80d372afac996282257ed30e6f3c3c26b2"
+   },
    {
     "createdAt": 1783121583646,
     "chain": "ethereum",
@@ -131,43 +158,16 @@
     "usd": 1.2377049999999998,
     "credits": 1485245,
     "txHash": "0x836adf83794e89fb6fe82157eb77da555a9f49a67a8a4eb3ab568bfec219458d"
-   },
-   {
-    "createdAt": 1780751795123,
-    "chain": "ethereum",
-    "currency": "ALEPH",
-    "provider": "WALLET",
-    "usd": 2.4754099999999997,
-    "credits": 2970491,
-    "txHash": "0xe917ef55b75f6279ded0f09205e9e099944d5eaa02a04dd2b7c65bc95d3bcba8"
-   },
-   {
-    "createdAt": 1780706113491,
-    "chain": "ethereum",
-    "currency": "USDC",
-    "provider": "WALLET",
-    "usd": 20,
-    "credits": 20000000,
-    "txHash": "0xb4074448e19e09440b4e4098b6623580cb6e26a677e63f201ea89b49d386c29d"
-   },
-   {
-    "createdAt": 1780673527895,
-    "chain": "ethereum",
-    "currency": "USDC",
-    "provider": "WALLET",
-    "usd": 10,
-    "credits": 10000000,
-    "txHash": "0x90f94beffa2cc3b9c88e31591d398695c7cabf7c057259763c5077413141ad99"
    }
   ]
  },
  "chain": {
-  "lastScannedBlock": 25458948,
+  "lastScannedBlock": 25482163,
   "deployBlock": 24270182,
-  "processingRuns": 8,
-  "processedUsd": 69402.03248496055,
+  "processingRuns": 9,
+  "processedUsd": 69408.93288732063,
   "alephMarketBought": 8356.858003546597,
-  "alephDistributed": 5051661.758003547,
+  "alephDistributed": 5052269.758003547,
   "alephBurned": 0,
   "burnActivated": false,
   "events": [
@@ -322,6 +322,25 @@
     "isStable": false,
     "marketBuy": false,
     "usdValue": 53.67915266706482
+   },
+   {
+    "blockNumber": 25478116,
+    "timestamp": 1783396523000,
+    "txHash": "0x3b5375c8caddfa9427d51740217e22ea2f19dbef79c12a7e7a29e9bcf89aeb19",
+    "token": "0x27702a26126e0b3702af63ee09ac4d1a084ef628",
+    "tokenSymbol": "ALEPH",
+    "sender": "0xc870b0ca4b3d65f33e2a3c732ab3cd2ae555b14e",
+    "amountIn": 640,
+    "swapAmountIn": 0,
+    "alephReceived": 640,
+    "alephBurned": 0,
+    "alephToDistribution": 608,
+    "toDevelopers": 32,
+    "toDevelopersToken": "ALEPH",
+    "swapVersion": 0,
+    "isStable": false,
+    "marketBuy": false,
+    "usdValue": 6.900402360071207
    }
   ]
  },
@@ -374,9 +393,13 @@
   },
   {
    "month": "2026-07",
-   "usd": 1.084612,
-   "purchases": 1,
-   "credits": 1301534
+   "usd": 23.206827,
+   "purchases": 4,
+   "credits": 24588191,
+   "processedUsd": 6.900402360071207,
+   "alephBought": 0,
+   "alephDistributed": 608,
+   "alephBurned": 0
   }
  ]
 }
