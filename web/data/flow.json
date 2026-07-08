@@ -1,6 +1,6 @@
 {
  "schemaVersion": 1,
- "generatedAt": "2026-07-08T18:48:18.789Z",
+ "generatedAt": "2026-07-08T20:38:27.033Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
   "totalUsd": 69408.93288732063,
@@ -8,15 +8,15 @@
   "unpricedRuns": 0
  },
  "credits": {
-  "totalUsd": 4680.386207000002,
-  "totalCredits": 5510765418,
-  "completedPurchases": 97,
+  "totalUsd": 4711.601637000003,
+  "totalCredits": 5548223933,
+  "completedPurchases": 98,
   "firstPurchaseAt": 1766398192879,
-  "lastPurchaseAt": 1783394842078,
+  "lastPurchaseAt": 1783538011054,
   "byCurrency": {
    "ALEPH": {
-    "purchases": 62,
-    "usd": 4152.086207000002
+    "purchases": 63,
+    "usd": 4183.301637000002
    },
    "USDC": {
     "purchases": 35,
@@ -24,6 +24,15 @@
    }
   },
   "latest": [
+   {
+    "createdAt": 1783538011054,
+    "chain": "ethereum",
+    "currency": "ALEPH",
+    "provider": "WALLET",
+    "usd": 31.215429999999998,
+    "credits": 37458515,
+    "txHash": "0x97b661c47aeecf76a4f0798604352fbcca903647497443e63df1860c335f278c"
+   },
    {
     "createdAt": 1783394842078,
     "chain": "ethereum",
@@ -149,20 +158,11 @@
     "usd": 70.957616,
     "credits": 85149139,
     "txHash": "0x1bb0292f8dbe65db7fe93bcf4c30864fc81aaa7d4b032e903cf739de47891996"
-   },
-   {
-    "createdAt": 1780753972460,
-    "chain": "ethereum",
-    "currency": "ALEPH",
-    "provider": "WALLET",
-    "usd": 1.2377049999999998,
-    "credits": 1485245,
-    "txHash": "0x836adf83794e89fb6fe82157eb77da555a9f49a67a8a4eb3ab568bfec219458d"
    }
   ]
  },
  "chain": {
-  "lastScannedBlock": 25489735,
+  "lastScannedBlock": 25490283,
   "deployBlock": 24270182,
   "processingRuns": 9,
   "processedUsd": 69408.93288732063,
@@ -393,9 +393,9 @@
   },
   {
    "month": "2026-07",
-   "usd": 23.206827,
-   "purchases": 4,
-   "credits": 24588191,
+   "usd": 54.422256999999995,
+   "purchases": 5,
+   "credits": 62046706,
    "processedUsd": 6.900402360071207,
    "alephBought": 0,
    "alephDistributed": 608,
