@@ -1,6 +1,6 @@
 {
  "schemaVersion": 1,
- "generatedAt": "2026-07-16T18:33:32.491Z",
+ "generatedAt": "2026-07-19T13:56:52.014Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
   "totalUsd": 69547.77806900766,
@@ -8,15 +8,15 @@
   "unpricedRuns": 0
  },
  "credits": {
-  "totalUsd": 4716.941702000004,
-  "totalCredits": 5554632011,
-  "completedPurchases": 99,
+  "totalUsd": 4765.193356000003,
+  "totalCredits": 5612533994,
+  "completedPurchases": 101,
   "firstPurchaseAt": 1766398192879,
-  "lastPurchaseAt": 1784104503720,
+  "lastPurchaseAt": 1784408237824,
   "byCurrency": {
    "ALEPH": {
-    "purchases": 64,
-    "usd": 4188.641702000003
+    "purchases": 66,
+    "usd": 4236.893356000003
    },
    "USDC": {
     "purchases": 35,
@@ -24,6 +24,24 @@
    }
   },
   "latest": [
+   {
+    "createdAt": 1784408237824,
+    "chain": "ethereum",
+    "currency": "ALEPH",
+    "provider": "WALLET",
+    "usd": 0.8358639999999999,
+    "credits": 1003036,
+    "txHash": "0xe7b07b9c54a5bf07410893d919d7b481ffcbf2aa11be7a813fdf637f92328ff4"
+   },
+   {
+    "createdAt": 1784288307868,
+    "chain": "ethereum",
+    "currency": "ALEPH",
+    "provider": "WALLET",
+    "usd": 47.41579,
+    "credits": 56898947,
+    "txHash": "0x46e49fa0ce91d1e1c9e251823b39165d1ea9ebe75cdc08454d61af944d02ec1c"
+   },
    {
     "createdAt": 1784104503720,
     "chain": "ethereum",
@@ -140,29 +158,11 @@
     "usd": 69,
     "credits": 69000000,
     "txHash": "0x0674d40875b6c72f532c2a247fa3faaf363e3e10c3b8b59b07366bca60399a19"
-   },
-   {
-    "createdAt": 1780834072699,
-    "chain": "ethereum",
-    "currency": "ALEPH",
-    "provider": "WALLET",
-    "usd": 34.692665,
-    "credits": 41631197,
-    "txHash": "0x773d0b7da4c181d9adc281ef0562dc8ef154905b4045fb1c6661b3205d5e5eed"
-   },
-   {
-    "createdAt": 1780833399259,
-    "chain": "ethereum",
-    "currency": "ALEPH",
-    "provider": "WALLET",
-    "usd": 34.692665,
-    "credits": 41631197,
-    "txHash": "0x773d0b7da4c181d9adc281ef0562dc8ef154905b4045fb1c6661b3205d5e5eed"
    }
   ]
  },
  "chain": {
-  "lastScannedBlock": 25547043,
+  "lastScannedBlock": 25567189,
   "deployBlock": 24270182,
   "processingRuns": 12,
   "processedUsd": 69547.77806900766,
@@ -450,9 +450,9 @@
   },
   {
    "month": "2026-07",
-   "usd": 59.762322,
-   "purchases": 6,
-   "credits": 68454784,
+   "usd": 108.01397600000001,
+   "purchases": 8,
+   "credits": 126356767,
    "processedUsd": 145.7455840471178,
    "alephBought": 7824.132956308847,
    "alephDistributed": 11757.132956308847,
