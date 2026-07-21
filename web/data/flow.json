@@ -1,10 +1,10 @@
 {
- "schemaVersion": 1,
- "generatedAt": "2026-07-21T12:01:30.287Z",
+ "schemaVersion": 2,
+ "generatedAt": "2026-07-21T14:14:36.663Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
-  "totalUsd": 69547.77806900766,
-  "alephProcessed": 5329062.990959856,
+  "totalUsd": 69595.19385877303,
+  "alephProcessed": 5333503.990959856,
   "unpricedRuns": 0
  },
  "credits": {
@@ -162,17 +162,18 @@
   ]
  },
  "chain": {
-  "lastScannedBlock": 25580958,
+  "lastScannedBlock": 25581598,
   "deployBlock": 24270182,
-  "processingRuns": 12,
-  "processedUsd": 69547.77806900766,
+  "processingRuns": 13,
+  "processedUsd": 69595.19385877303,
   "alephMarketBought": 16180.990959855444,
-  "alephDistributed": 5063418.890959856,
+  "alephDistributed": 5067637.840959856,
   "alephBurned": 0,
   "burnActivated": false,
   "events": [
    {
     "blockNumber": 25221513,
+    "logIndex": 130,
     "timestamp": 1780304747000,
     "txHash": "0xeb32667f1947b23fe5c7abe6ab2bd7879578afa6b39b24cfbc01c9b81c4be68f",
     "token": "0x27702a26126e0b3702af63ee09ac4d1a084ef628",
@@ -192,6 +193,7 @@
    },
    {
     "blockNumber": 25221538,
+    "logIndex": 105,
     "timestamp": 1780305047000,
     "txHash": "0xa10d2a33f82567716d149bb1fddd52c47d0b8475b4e76b89dec87867c5bf3226",
     "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
@@ -211,6 +213,7 @@
    },
    {
     "blockNumber": 25295060,
+    "logIndex": 265,
     "timestamp": 1781191055000,
     "txHash": "0xfff8d75a960d02e3c5cc3346b0e48c2ffb1712098678fccdfc58ed45d8f99e5b",
     "token": "0x27702a26126e0b3702af63ee09ac4d1a084ef628",
@@ -230,6 +233,7 @@
    },
    {
     "blockNumber": 25324064,
+    "logIndex": 706,
     "timestamp": 1781540471000,
     "txHash": "0x0bbff4df1a88cf893813f344529a4c1c643233bcff7461a2e134a6b96bda4af1",
     "token": "0x27702a26126e0b3702af63ee09ac4d1a084ef628",
@@ -249,6 +253,7 @@
    },
    {
     "blockNumber": 25324762,
+    "logIndex": 149,
     "timestamp": 1781548907000,
     "txHash": "0x2b31451bcb326d28f9cd0cddd04a200035dccc5e4739d93f76c1a6609dc21ea2",
     "token": "0x27702a26126e0b3702af63ee09ac4d1a084ef628",
@@ -268,6 +273,7 @@
    },
    {
     "blockNumber": 25356778,
+    "logIndex": 64,
     "timestamp": 1781934143000,
     "txHash": "0x607db8fb567a42eb448ec8188b3ea76d433f88c30d7c1f797f696c23432b6374",
     "token": "0x27702a26126e0b3702af63ee09ac4d1a084ef628",
@@ -287,6 +293,7 @@
    },
    {
     "blockNumber": 25410360,
+    "logIndex": 232,
     "timestamp": 1782579959000,
     "txHash": "0xf41038a85b0e36e88c323b951a642f085884bd43a9d7017610764850ffadc231",
     "token": "0x27702a26126e0b3702af63ee09ac4d1a084ef628",
@@ -306,6 +313,7 @@
    },
    {
     "blockNumber": 25423600,
+    "logIndex": 742,
     "timestamp": 1782739439000,
     "txHash": "0x8d27545592c69a7b65e7b79ea2a7ebe99158c783afacd242a805249b90702ccd",
     "token": "0x27702a26126e0b3702af63ee09ac4d1a084ef628",
@@ -325,6 +333,7 @@
    },
    {
     "blockNumber": 25478116,
+    "logIndex": 55,
     "timestamp": 1783396523000,
     "txHash": "0x3b5375c8caddfa9427d51740217e22ea2f19dbef79c12a7e7a29e9bcf89aeb19",
     "token": "0x27702a26126e0b3702af63ee09ac4d1a084ef628",
@@ -344,6 +353,7 @@
    },
    {
     "blockNumber": 25490374,
+    "logIndex": 384,
     "timestamp": 1783544123000,
     "txHash": "0x99e403c4ff5c9a2910da5c5720bdc4ffb2113e394d1555859f8a4fecc49b22ef",
     "token": "0x27702a26126e0b3702af63ee09ac4d1a084ef628",
@@ -363,6 +373,7 @@
    },
    {
     "blockNumber": 25525574,
+    "logIndex": 551,
     "timestamp": 1783968215000,
     "txHash": "0x95d76b549df9af8bd58f24a7bb924eaf8e2cb6d70be8d5af99fee38ca8567e07",
     "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
@@ -382,6 +393,7 @@
    },
    {
     "blockNumber": 25536997,
+    "logIndex": 134,
     "timestamp": 1784105771000,
     "txHash": "0x3b25ef509ba5366444dc35bd4cb0ef2489c6b0c850e3e441d74e2022e64363ca",
     "token": "0x27702a26126e0b3702af63ee09ac4d1a084ef628",
@@ -398,6 +410,26 @@
     "isStable": false,
     "marketBuy": false,
     "usdValue": 5.340065373910491
+   },
+   {
+    "blockNumber": 25552189,
+    "logIndex": 91,
+    "timestamp": 1784288675000,
+    "txHash": "0x1bff71fdccc3f2d44adcc4c96484c0b1ca1dc62238751a79261a193a13c2b92d",
+    "token": "0x27702a26126e0b3702af63ee09ac4d1a084ef628",
+    "tokenSymbol": "ALEPH",
+    "sender": "0xc870b0ca4b3d65f33e2a3c732ab3cd2ae555b14e",
+    "amountIn": 4441,
+    "swapAmountIn": 0,
+    "alephReceived": 4441,
+    "alephBurned": 0,
+    "alephToDistribution": 4218.95,
+    "toDevelopers": 222.05,
+    "toDevelopersToken": "ALEPH",
+    "swapVersion": 0,
+    "isStable": false,
+    "marketBuy": false,
+    "usdValue": 47.415789765366156
    }
   ]
  },
@@ -453,9 +485,9 @@
    "usd": 108.01397600000001,
    "purchases": 8,
    "credits": 126356767,
-   "processedUsd": 145.7455840471178,
+   "processedUsd": 193.16137381248396,
    "alephBought": 7824.132956308847,
-   "alephDistributed": 11757.132956308847,
+   "alephDistributed": 15976.082956308848,
    "alephBurned": 0
   }
  ]
