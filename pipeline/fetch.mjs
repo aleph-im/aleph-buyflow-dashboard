@@ -34,11 +34,15 @@ const OUT_PATH = join(dirname(fileURLToPath(import.meta.url)), "..", "web", "dat
 // Keyless public endpoints tried in order — publicnode started requiring a
 // token for heavier eth_getLogs calls (HTTP 403), which silently killed the
 // hourly refresh, so never depend on a single provider.
+//
+// Only general-purpose nodes belong here. Transaction relays (flashbots,
+// mevblocker) answer eth_getLogs with an empty array instead of an error,
+// which is indistinguishable from "no events" — see LOG_CANARY below.
 const RPC_URLS = [
   ...(process.env.ETH_RPC_URL ? [process.env.ETH_RPC_URL] : []),
   "https://ethereum-rpc.publicnode.com",
-  "https://rpc.flashbots.net",
-  "https://eth.merkle.io",
+  "https://1rpc.io/eth",
+  "https://eth.llamarpc.com",
 ];
 
 const CONFIG = {
@@ -48,7 +52,18 @@ const CONFIG = {
   // keccak256("TokenPaymentsProcessed(address,address,uint256,uint256,uint256,uint256,uint256,uint256,uint8,bool)")
   topicTokenPaymentsProcessed: "0x3db36cd2496ef869c223c05bc35ff9785f5cc1ffeca2b221d884488c4282cbbc",
   logChunkSize: 10000, // capped to keep eth_getLogs responses under the endpoint's payload limit (HTTP 413)
-  schemaVersion: 1,
+  // v2 adds logIndex to chain events. Bumping also forces the one-time full
+  // rescan that repairs the blocks lost to the silent-empty-getLogs bug.
+  schemaVersion: 2,
+};
+
+// An endpoint that answers eth_getLogs with an empty array rather than an
+// error creates a permanent, silent hole: the chunk looks event-free,
+// lastScannedBlock advances past it, and the incremental scan never revisits
+// those blocks. This is how the event in block 25552189 was lost. So no
+// endpoint is trusted for logs until it has returned a log we know exists.
+const LOG_CANARY = {
+  block: 25221513, // first TokenPaymentsProcessed event ever emitted
 };
 
 // Known tokens; anything unknown is resolved on-chain via symbol()/decimals().
@@ -89,6 +104,66 @@ async function rpc(method, params, attempts = 2 * RPC_URLS.length) {
 }
 
 const hex = (n) => "0x" + n.toString(16);
+
+// eth_getLogs is the one call where a wrong-but-successful answer is
+// unrecoverable, so it gets its own endpoint resolution: an endpoint must
+// prove it indexes historical logs (LOG_CANARY) before any of its results
+// are believed. If none can, we throw rather than write a cache with holes.
+let logUrl = null;
+const rejectedLogUrls = new Set();
+
+async function servesLogs(url) {
+  try {
+    const logs = await rpcOnce(url, "eth_getLogs", [{
+      address: CONFIG.contract,
+      fromBlock: hex(LOG_CANARY.block),
+      toBlock: hex(LOG_CANARY.block),
+      topics: [CONFIG.topicTokenPaymentsProcessed],
+    }]);
+    return Array.isArray(logs) && logs.length > 0;
+  } catch {
+    return false;
+  }
+}
+
+async function resolveLogUrl() {
+  if (logUrl) return logUrl;
+  for (const url of RPC_URLS) {
+    if (rejectedLogUrls.has(url)) continue;
+    if (await servesLogs(url)) {
+      logUrl = url;
+      return url;
+    }
+    console.warn(`RPC ${url} cannot serve historical logs — excluded from the scan`);
+    rejectedLogUrls.add(url);
+  }
+  throw new Error(
+    "No RPC endpoint can serve eth_getLogs for a known-present log. " +
+      "Refusing to scan, because empty results here are silently written as 'no events'. " +
+      "Set ETH_RPC_URL to an archive-capable endpoint.",
+  );
+}
+
+async function getLogs(start, end) {
+  for (let attempt = 1; ; attempt++) {
+    const url = await resolveLogUrl();
+    try {
+      return await rpcOnce(url, "eth_getLogs", [{
+        address: CONFIG.contract,
+        fromBlock: hex(start),
+        toBlock: hex(end),
+        topics: [CONFIG.topicTokenPaymentsProcessed],
+      }]);
+    } catch (err) {
+      if (attempt >= RPC_URLS.length + 1) throw err;
+      console.warn(`eth_getLogs ${start}-${end} via ${url} failed (${err.message}), rotating`);
+      rejectedLogUrls.add(url); // re-canary onto a different endpoint
+      logUrl = null;
+      await new Promise((r) => setTimeout(r, 1500 * attempt));
+    }
+  }
+}
+
 const word = (data, i) => BigInt("0x" + data.slice(2 + i * 64, 2 + (i + 1) * 64));
 const topicAddress = (t) => "0x" + t.slice(26);
 
@@ -122,22 +197,23 @@ async function fetchChainEvents(previous) {
   const events = [...(previous?.chain?.events ?? [])];
   const tokenCache = {};
 
+  // Keyed by log identity so a re-scan of an already-cached range updates in
+  // place instead of duplicating (a full rescan replays every block).
+  const byId = new Map(events.map((e) => [`${e.txHash}:${e.logIndex ?? 0}`, e]));
+
   for (let start = fromBlock; start <= latestBlock; start += CONFIG.logChunkSize) {
     const end = Math.min(start + CONFIG.logChunkSize - 1, latestBlock);
-    const logs = await rpc("eth_getLogs", [{
-      address: CONFIG.contract,
-      fromBlock: hex(start),
-      toBlock: hex(end),
-      topics: [CONFIG.topicTokenPaymentsProcessed],
-    }]);
+    const logs = await getLogs(start, end);
     for (const log of logs) {
       const blockNumber = Number(BigInt(log.blockNumber));
+      const logIndex = Number(BigInt(log.logIndex));
       const block = await rpc("eth_getBlockByNumber", [log.blockNumber, false]);
       const token = topicAddress(log.topics[1]);
       const { symbol, decimals } = await tokenInfo(token, tokenCache);
       const isStable = word(log.data, 7) === 1n;
-      events.push({
+      byId.set(`${log.transactionHash}:${logIndex}`, {
         blockNumber,
+        logIndex,
         timestamp: Number(BigInt(block.timestamp)) * 1000,
         txHash: log.transactionHash,
         token,
@@ -159,8 +235,10 @@ async function fetchChainEvents(previous) {
     }
   }
 
-  events.sort((a, b) => a.blockNumber - b.blockNumber);
-  return { latestBlock, events };
+  const merged = [...byId.values()].sort(
+    (a, b) => a.blockNumber - b.blockNumber || a.logIndex - b.logIndex,
+  );
+  return { latestBlock, events: merged };
 }
 
 async function fetchCreditPayments() {
@@ -305,13 +383,16 @@ function aggregate(payments, chainEvents, latestBlock) {
 }
 
 async function main() {
-  let previous = null;
+  let cached = null;
   try {
-    previous = JSON.parse(readFileSync(OUT_PATH, "utf8"));
-    if (previous.schemaVersion !== CONFIG.schemaVersion) previous = null; // full rescan on schema change
+    cached = JSON.parse(readFileSync(OUT_PATH, "utf8"));
   } catch {
     /* first run */
   }
+  // A schema change forces a full rescan (no incremental resume, no seed
+  // events), but the cache is still the floor the result must clear — a
+  // rebuild is exactly when a silent data loss would slip through.
+  const previous = cached?.schemaVersion === CONFIG.schemaVersion ? cached : null;
 
   const [{ latestBlock, events }, payments] = await Promise.all([
     fetchChainEvents(previous),
@@ -319,10 +400,12 @@ async function main() {
   ]);
 
   // Guardrail: refuse to overwrite a good cache with an emptier one.
-  if (previous) {
-    if (events.length < previous.chain.events.length)
-      throw new Error("Refusing to write: fewer chain events than previous cache");
-    if (payments.filter((p) => p.status === "COMPLETED").length < previous.credits.completedPurchases)
+  if (cached) {
+    if (events.length < cached.chain.events.length)
+      throw new Error(
+        `Refusing to write: ${events.length} chain events < ${cached.chain.events.length} in previous cache`,
+      );
+    if (payments.filter((p) => p.status === "COMPLETED").length < cached.credits.completedPurchases)
       throw new Error("Refusing to write: fewer completed payments than previous cache");
   }
 
