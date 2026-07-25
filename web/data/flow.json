@@ -1,6 +1,6 @@
 {
  "schemaVersion": 2,
- "generatedAt": "2026-07-25T17:17:26.356Z",
+ "generatedAt": "2026-07-25T19:35:56.956Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
   "totalUsd": 69595.19385877303,
@@ -8,15 +8,15 @@
   "unpricedRuns": 0
  },
  "credits": {
-  "totalUsd": 4765.193356000003,
-  "totalCredits": 5612533994,
-  "completedPurchases": 101,
+  "totalUsd": 4867.376745000003,
+  "totalCredits": 5735154060,
+  "completedPurchases": 102,
   "firstPurchaseAt": 1766398192879,
-  "lastPurchaseAt": 1784408237824,
+  "lastPurchaseAt": 1785006726459,
   "byCurrency": {
    "ALEPH": {
-    "purchases": 66,
-    "usd": 4236.893356000003
+    "purchases": 67,
+    "usd": 4339.076745000004
    },
    "USDC": {
     "purchases": 35,
@@ -24,6 +24,15 @@
    }
   },
   "latest": [
+   {
+    "createdAt": 1785006726459,
+    "chain": "ethereum",
+    "currency": "ALEPH",
+    "provider": "WALLET",
+    "usd": 102.18338899999999,
+    "credits": 122620066,
+    "txHash": "0xa95dc9a5f30fd6f9b2b71dfd688403c96d98259fca129aa9b34cce11f6fa19cb"
+   },
    {
     "createdAt": 1784408237824,
     "chain": "ethereum",
@@ -149,20 +158,11 @@
     "usd": 1324.653947,
     "credits": 1589584736,
     "txHash": "0xf0e2d324c41a53fe0471fb701a71e1f56bb577e6e1c23983fe394b096206aeed"
-   },
-   {
-    "createdAt": 1781100066670,
-    "chain": "ethereum",
-    "currency": "USDC",
-    "provider": "WALLET",
-    "usd": 69,
-    "credits": 69000000,
-    "txHash": "0x0674d40875b6c72f532c2a247fa3faaf363e3e10c3b8b59b07366bca60399a19"
    }
   ]
  },
  "chain": {
-  "lastScannedBlock": 25611220,
+  "lastScannedBlock": 25611911,
   "deployBlock": 24270182,
   "processingRuns": 13,
   "processedUsd": 69595.19385877303,
@@ -482,9 +482,9 @@
   },
   {
    "month": "2026-07",
-   "usd": 108.01397600000001,
-   "purchases": 8,
-   "credits": 126356767,
+   "usd": 210.19736500000002,
+   "purchases": 9,
+   "credits": 248976833,
    "processedUsd": 193.16137381248396,
    "alephBought": 7824.132956308847,
    "alephDistributed": 15976.082956308848,
