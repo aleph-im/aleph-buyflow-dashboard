@@ -1,10 +1,10 @@
 {
  "schemaVersion": 2,
- "generatedAt": "2026-07-27T20:44:27.177Z",
+ "generatedAt": "2026-07-27T22:19:13.984Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
-  "totalUsd": 69595.19385877303,
-  "alephProcessed": 5333503.990959856,
+  "totalUsd": 69697.37110844083,
+  "alephProcessed": 5343665.990959856,
   "unpricedRuns": 0
  },
  "credits": {
@@ -162,12 +162,12 @@
   ]
  },
  "chain": {
-  "lastScannedBlock": 25626612,
+  "lastScannedBlock": 25627085,
   "deployBlock": 24270182,
-  "processingRuns": 13,
-  "processedUsd": 69595.19385877303,
+  "processingRuns": 14,
+  "processedUsd": 69697.37110844083,
   "alephMarketBought": 16180.990959855444,
-  "alephDistributed": 5067637.840959856,
+  "alephDistributed": 5077291.740959857,
   "alephBurned": 0,
   "burnActivated": false,
   "events": [
@@ -430,6 +430,26 @@
     "isStable": false,
     "marketBuy": false,
     "usdValue": 47.415789765366156
+   },
+   {
+    "blockNumber": 25626997,
+    "logIndex": 404,
+    "timestamp": 1785189635000,
+    "txHash": "0x6384fb4a9ad65fd87de85e59bbf02edb35410f7e3ea6a1d8bf6204f20feb9b20",
+    "token": "0x27702a26126e0b3702af63ee09ac4d1a084ef628",
+    "tokenSymbol": "ALEPH",
+    "sender": "0xc870b0ca4b3d65f33e2a3c732ab3cd2ae555b14e",
+    "amountIn": 10162,
+    "swapAmountIn": 0,
+    "alephReceived": 10162,
+    "alephBurned": 0,
+    "alephToDistribution": 9653.9,
+    "toDevelopers": 508.1,
+    "toDevelopersToken": "ALEPH",
+    "swapVersion": 0,
+    "isStable": false,
+    "marketBuy": false,
+    "usdValue": 102.17724966780062
    }
   ]
  },
@@ -485,9 +505,9 @@
    "usd": 221.51238,
    "purchases": 13,
    "credits": 260458850,
-   "processedUsd": 193.16137381248396,
+   "processedUsd": 295.3386234802846,
    "alephBought": 7824.132956308847,
-   "alephDistributed": 15976.082956308848,
+   "alephDistributed": 25629.98295630885,
    "alephBurned": 0
   }
  ]
