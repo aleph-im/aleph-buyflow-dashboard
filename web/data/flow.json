@@ -1,6 +1,6 @@
 {
  "schemaVersion": 2,
- "generatedAt": "2026-07-27T04:07:52.335Z",
+ "generatedAt": "2026-07-27T07:53:39.721Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
   "totalUsd": 69595.19385877303,
@@ -8,15 +8,15 @@
   "unpricedRuns": 0
  },
  "credits": {
-  "totalUsd": 4867.376745000003,
-  "totalCredits": 5735154060,
-  "completedPurchases": 102,
+  "totalUsd": 4868.211760000004,
+  "totalCredits": 5736156077,
+  "completedPurchases": 103,
   "firstPurchaseAt": 1766398192879,
-  "lastPurchaseAt": 1785006726459,
+  "lastPurchaseAt": 1785136739528,
   "byCurrency": {
    "ALEPH": {
-    "purchases": 67,
-    "usd": 4339.076745000004
+    "purchases": 68,
+    "usd": 4339.911760000004
    },
    "USDC": {
     "purchases": 35,
@@ -24,6 +24,15 @@
    }
   },
   "latest": [
+   {
+    "createdAt": 1785136739528,
+    "chain": "ethereum",
+    "currency": "ALEPH",
+    "provider": "WALLET",
+    "usd": 0.835015,
+    "credits": 1002017,
+    "txHash": "0x671ae28475bdff484a772e63db1ccbea9036dd046ca6401c6dc5d36ff082020d"
+   },
    {
     "createdAt": 1785006726459,
     "chain": "ethereum",
@@ -149,20 +158,11 @@
     "usd": 1324.653947,
     "credits": 1589584736,
     "txHash": "0x15a918026b2a72929abdc3e1977f9010f1924c62cff2aea632bcb5c2ebf3b83b"
-   },
-   {
-    "createdAt": 1781539530121,
-    "chain": "ethereum",
-    "currency": "ALEPH",
-    "provider": "WALLET",
-    "usd": 1324.653947,
-    "credits": 1589584736,
-    "txHash": "0xf0e2d324c41a53fe0471fb701a71e1f56bb577e6e1c23983fe394b096206aeed"
    }
   ]
  },
  "chain": {
-  "lastScannedBlock": 25621649,
+  "lastScannedBlock": 25622771,
   "deployBlock": 24270182,
   "processingRuns": 13,
   "processedUsd": 69595.19385877303,
@@ -482,9 +482,9 @@
   },
   {
    "month": "2026-07",
-   "usd": 210.19736500000002,
-   "purchases": 9,
-   "credits": 248976833,
+   "usd": 211.03238000000002,
+   "purchases": 10,
+   "credits": 249978850,
    "processedUsd": 193.16137381248396,
    "alephBought": 7824.132956308847,
    "alephDistributed": 15976.082956308848,
