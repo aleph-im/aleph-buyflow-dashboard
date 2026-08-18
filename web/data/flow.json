@@ -1,6 +1,6 @@
 {
  "schemaVersion": 2,
- "generatedAt": "2026-08-18T11:42:46.085Z",
+ "generatedAt": "2026-08-18T13:09:45.566Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
   "totalUsd": 118807.18152800792,
@@ -8,22 +8,31 @@
   "unpricedRuns": 0
  },
  "credits": {
-  "totalUsd": 4962.577055000003,
-  "totalCredits": 5845698429,
-  "completedPurchases": 114,
+  "totalUsd": 4987.706186000004,
+  "totalCredits": 5875853386,
+  "completedPurchases": 115,
   "firstPurchaseAt": 1766398192879,
-  "lastPurchaseAt": 1786905912904,
+  "lastPurchaseAt": 1787056671649,
   "byCurrency": {
+   "ALEPH": {
+    "purchases": 74,
+    "usd": 4440.926186000002
+   },
    "USDC": {
     "purchases": 41,
     "usd": 546.78
-   },
-   "ALEPH": {
-    "purchases": 73,
-    "usd": 4415.797055000004
    }
   },
   "latest": [
+   {
+    "createdAt": 1787056671649,
+    "chain": "ethereum",
+    "currency": "ALEPH",
+    "provider": "WALLET",
+    "usd": 25.129130999999997,
+    "credits": 30154957,
+    "txHash": "0x43e4058968736f6fc52a4a6cef09bf3f4fe6bd8fb23bd4ec44b718669edef1ab"
+   },
    {
     "createdAt": 1786905912904,
     "chain": "ethereum",
@@ -149,20 +158,11 @@
     "usd": 0.8358639999999999,
     "credits": 1003036,
     "txHash": "0xe7b07b9c54a5bf07410893d919d7b481ffcbf2aa11be7a813fdf637f92328ff4"
-   },
-   {
-    "createdAt": 1784288307868,
-    "chain": "ethereum",
-    "currency": "ALEPH",
-    "provider": "WALLET",
-    "usd": 47.41579,
-    "credits": 56898947,
-    "txHash": "0x46e49fa0ce91d1e1c9e251823b39165d1ea9ebe75cdc08454d61af944d02ec1c"
    }
   ]
  },
  "chain": {
-  "lastScannedBlock": 25781740,
+  "lastScannedBlock": 25782174,
   "deployBlock": 24270182,
   "processingRuns": 19,
   "processedUsd": 118807.18152800792,
@@ -612,9 +612,9 @@
   },
   {
    "month": "2026-08",
-   "usd": 78.88821,
-   "purchases": 7,
-   "credits": 93065850,
+   "usd": 104.017341,
+   "purchases": 8,
+   "credits": 123220807,
    "processedUsd": 98.66293975548001,
    "alephBought": 0,
    "alephDistributed": 9971.199999999999,
