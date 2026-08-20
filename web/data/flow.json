@@ -1,6 +1,6 @@
 {
  "schemaVersion": 2,
- "generatedAt": "2026-08-20T14:00:39.624Z",
+ "generatedAt": "2026-08-20T14:56:19.743Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
   "totalUsd": 118807.18152800792,
@@ -8,22 +8,31 @@
   "unpricedRuns": 0
  },
  "credits": {
-  "totalUsd": 5006.706186000004,
-  "totalCredits": 5894853386,
-  "completedPurchases": 118,
+  "totalUsd": 5016.284854000003,
+  "totalCredits": 5906347787,
+  "completedPurchases": 119,
   "firstPurchaseAt": 1766398192879,
-  "lastPurchaseAt": 1787200814885,
+  "lastPurchaseAt": 1787234951388,
   "byCurrency": {
+   "ALEPH": {
+    "purchases": 75,
+    "usd": 4450.5048540000025
+   },
    "USDC": {
     "purchases": 44,
     "usd": 565.78
-   },
-   "ALEPH": {
-    "purchases": 74,
-    "usd": 4440.926186000002
    }
   },
   "latest": [
+   {
+    "createdAt": 1787234951388,
+    "chain": "ethereum",
+    "currency": "ALEPH",
+    "provider": "WALLET",
+    "usd": 9.578668,
+    "credits": 11494401,
+    "txHash": "0x7cdcea4c4a6fb4d135038636d3b954e301818f746d5111b354a3104a21017bc1"
+   },
    {
     "createdAt": 1787200814885,
     "chain": "ethereum",
@@ -149,20 +158,11 @@
     "usd": 2,
     "credits": 2000000,
     "txHash": "0x5a0d7a6bacdb6e02e8a44db50d10e03231add6a31cce99bb5d6486e6af81fbdc"
-   },
-   {
-    "createdAt": 1785154842497,
-    "chain": "ethereum",
-    "currency": "USDC",
-    "provider": "WALLET",
-    "usd": 2,
-    "credits": 2000000,
-    "txHash": "0x5a0d7a6bacdb6e02e8a44db50d10e03231add6a31cce99bb5d6486e6af81fbdc"
    }
   ]
  },
  "chain": {
-  "lastScannedBlock": 25796783,
+  "lastScannedBlock": 25797062,
   "deployBlock": 24270182,
   "processingRuns": 19,
   "processedUsd": 118807.18152800792,
@@ -612,9 +612,9 @@
   },
   {
    "month": "2026-08",
-   "usd": 123.017341,
-   "purchases": 11,
-   "credits": 142220807,
+   "usd": 132.59600899999998,
+   "purchases": 12,
+   "credits": 153715208,
    "processedUsd": 98.66293975548001,
    "alephBought": 0,
    "alephDistributed": 9971.199999999999,
