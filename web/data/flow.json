@@ -1,29 +1,38 @@
 {
  "schemaVersion": 2,
- "generatedAt": "2026-09-15T18:13:48.085Z",
+ "generatedAt": "2026-09-15T21:26:32.966Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
-  "totalUsd": 181737.05920994247,
+  "totalUsd": 181355.18922482754,
   "alephProcessed": 16372674.260959856,
   "unpricedRuns": 0
  },
  "credits": {
-  "totalUsd": 5290.021446000003,
-  "totalCredits": 6210151695,
-  "completedPurchases": 132,
+  "totalUsd": 5295.021446000003,
+  "totalCredits": 6215151695,
+  "completedPurchases": 133,
   "firstPurchaseAt": 1766398192879,
-  "lastPurchaseAt": 1789396783726,
+  "lastPurchaseAt": 1789507512475,
   "byCurrency": {
+   "USDC": {
+    "purchases": 52,
+    "usd": 694.1800000000001
+   },
    "ALEPH": {
     "purchases": 81,
     "usd": 4600.841446000004
-   },
-   "USDC": {
-    "purchases": 51,
-    "usd": 689.1800000000001
    }
   },
   "latest": [
+   {
+    "createdAt": 1789507512475,
+    "chain": "ethereum",
+    "currency": "USDC",
+    "provider": "WALLET",
+    "usd": 5,
+    "credits": 5000000,
+    "txHash": "0xaf0c40ceb767217787d99d356c605983ef7ec8927b9d24a40db9eb0c4ec1e213"
+   },
    {
     "createdAt": 1789396783726,
     "chain": "ethereum",
@@ -149,23 +158,14 @@
     "usd": 9.578668,
     "credits": 11494401,
     "txHash": "0x7cdcea4c4a6fb4d135038636d3b954e301818f746d5111b354a3104a21017bc1"
-   },
-   {
-    "createdAt": 1787200814885,
-    "chain": "ethereum",
-    "currency": "USDC",
-    "provider": "WALLET",
-    "usd": 7,
-    "credits": 7000000,
-    "txHash": "0xe23fab2370c8a0a1e805c93f8c2839dc7cec0318bb407913237cebea5e7ede40"
    }
   ]
  },
  "chain": {
-  "lastScannedBlock": 25984573,
+  "lastScannedBlock": 25985535,
   "deployBlock": 24270182,
   "processingRuns": 26,
-  "processedUsd": 181737.05920994247,
+  "processedUsd": 181355.18922482754,
   "alephMarketBought": 16180.990959855444,
   "alephDistributed": 15554849.597459856,
   "alephBurned": 0,
@@ -689,7 +689,7 @@
     "swapVersion": 0,
     "isStable": false,
     "marketBuy": false,
-    "usdValue": 52900.60177276793
+    "usdValue": 52518.73178765299
    }
   ]
  },
@@ -762,10 +762,10 @@
   },
   {
    "month": "2026-09",
-   "usd": 81.269633,
-   "purchases": 6,
-   "credits": 87843558,
-   "processedUsd": 52932.016743484994,
+   "usd": 86.26963299999998,
+   "purchases": 7,
+   "credits": 92843558,
+   "processedUsd": 52550.14675837006,
    "alephBought": 0,
    "alephDistributed": 4753234.75,
    "alephBurned": 0
