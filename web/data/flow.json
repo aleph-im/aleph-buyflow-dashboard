@@ -1,6 +1,6 @@
 {
  "schemaVersion": 2,
- "generatedAt": "2026-09-20T01:12:10.299Z",
+ "generatedAt": "2026-09-20T06:20:27.218Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
   "totalUsd": 181355.18922482754,
@@ -8,22 +8,31 @@
   "unpricedRuns": 0
  },
  "credits": {
-  "totalUsd": 5433.021446000004,
-  "totalCredits": 6353151695,
-  "completedPurchases": 139,
+  "totalUsd": 5434.141023000005,
+  "totalCredits": 6354495187,
+  "completedPurchases": 140,
   "firstPurchaseAt": 1766398192879,
-  "lastPurchaseAt": 1789865414507,
+  "lastPurchaseAt": 1789868247711,
   "byCurrency": {
+   "ALEPH": {
+    "purchases": 82,
+    "usd": 4601.9610230000035
+   },
    "USDC": {
     "purchases": 58,
     "usd": 832.1800000000001
-   },
-   "ALEPH": {
-    "purchases": 81,
-    "usd": 4600.841446000004
    }
   },
   "latest": [
+   {
+    "createdAt": 1789868247711,
+    "chain": "ethereum",
+    "currency": "ALEPH",
+    "provider": "WALLET",
+    "usd": 1.119577,
+    "credits": 1343492,
+    "txHash": "0x9306758a884c75c8d3968b69e56ad28089dc23176623848ed78e69e00879aa18"
+   },
    {
     "createdAt": 1789865414507,
     "chain": "ethereum",
@@ -149,20 +158,11 @@
     "usd": 107.751325,
     "credits": 129301590,
     "txHash": "0x987c7fac073a80ff42120b6a55b5d13135e2f53b2c96153a54748c35141d0f4c"
-   },
-   {
-    "createdAt": 1787933038417,
-    "chain": "ethereum",
-    "currency": "USDC",
-    "provider": "WALLET",
-    "usd": 10,
-    "credits": 10000000,
-    "txHash": "0xacb71c77a1f6be5c0657b7b60fdc6e0de4703f3a7408656df0a7853c224be00f"
    }
   ]
  },
  "chain": {
-  "lastScannedBlock": 26015350,
+  "lastScannedBlock": 26016884,
   "deployBlock": 24270182,
   "processingRuns": 26,
   "processedUsd": 181355.18922482754,
@@ -762,9 +762,9 @@
   },
   {
    "month": "2026-09",
-   "usd": 224.26963300000003,
-   "purchases": 13,
-   "credits": 230843558,
+   "usd": 225.38921000000002,
+   "purchases": 14,
+   "credits": 232187050,
    "processedUsd": 52550.14675837006,
    "alephBought": 0,
    "alephDistributed": 4753234.75,
