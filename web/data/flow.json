@@ -1,6 +1,6 @@
 {
  "schemaVersion": 2,
- "generatedAt": "2026-09-29T08:34:30.503Z",
+ "generatedAt": "2026-09-29T15:54:58.185Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
   "totalUsd": 181370.7872112756,
@@ -8,22 +8,31 @@
   "unpricedRuns": 0
  },
  "credits": {
-  "totalUsd": 5550.573988000005,
-  "totalCredits": 6473814744,
-  "completedPurchases": 145,
+  "totalUsd": 5556.112292000004,
+  "totalCredits": 6480460708,
+  "completedPurchases": 146,
   "firstPurchaseAt": 1766398192879,
-  "lastPurchaseAt": 1790605241950,
+  "lastPurchaseAt": 1790690974412,
   "byCurrency": {
+   "ALEPH": {
+    "purchases": 85,
+    "usd": 4621.932292000004
+   },
    "USDC": {
     "purchases": 61,
     "usd": 934.1800000000001
-   },
-   "ALEPH": {
-    "purchases": 84,
-    "usd": 4616.393988000003
    }
   },
   "latest": [
+   {
+    "createdAt": 1790690974412,
+    "chain": "ethereum",
+    "currency": "ALEPH",
+    "provider": "WALLET",
+    "usd": 5.538304,
+    "credits": 6645964,
+    "txHash": "0x0a9d20fa540ea51d0054417f2824be40ee8c9c873c2655eee87b7d0e43640b54"
+   },
    {
     "createdAt": 1790605241950,
     "chain": "ethereum",
@@ -149,20 +158,11 @@
     "usd": 4.8769849999999995,
     "credits": 5852382,
     "txHash": "0xe9dbc7f3d098c05452e466eb0132c21bd840dfbe02b319049aed4bab58812976"
-   },
-   {
-    "createdAt": 1789335927825,
-    "chain": "ethereum",
-    "currency": "ALEPH",
-    "provider": "WALLET",
-    "usd": 17.586384,
-    "credits": 21103660,
-    "txHash": "0xd7649d503ebc39b6e794675a4ba61fdf97d4a63da10a156ef3d1cbc656f0a5bf"
    }
   ]
  },
  "chain": {
-  "lastScannedBlock": 26081952,
+  "lastScannedBlock": 26084148,
   "deployBlock": 24270182,
   "processingRuns": 27,
   "processedUsd": 181370.7872112756,
@@ -782,9 +782,9 @@
   },
   {
    "month": "2026-09",
-   "usd": 341.822175,
-   "purchases": 19,
-   "credits": 351506607,
+   "usd": 347.360479,
+   "purchases": 20,
+   "credits": 358152571,
    "processedUsd": 52565.74474481813,
    "alephBought": 0,
    "alephDistributed": 4754483.05,
