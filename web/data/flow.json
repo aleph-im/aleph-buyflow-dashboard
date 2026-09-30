@@ -1,6 +1,6 @@
 {
  "schemaVersion": 2,
- "generatedAt": "2026-09-30T13:47:04.527Z",
+ "generatedAt": "2026-09-30T19:23:30.095Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
   "totalUsd": 181370.7872112756,
@@ -8,22 +8,31 @@
   "unpricedRuns": 0
  },
  "credits": {
-  "totalUsd": 5556.112292000004,
-  "totalCredits": 6480460708,
-  "completedPurchases": 146,
+  "totalUsd": 5574.112292000004,
+  "totalCredits": 6498460708,
+  "completedPurchases": 147,
   "firstPurchaseAt": 1766398192879,
-  "lastPurchaseAt": 1790690974412,
+  "lastPurchaseAt": 1790786441646,
   "byCurrency": {
+   "USDC": {
+    "purchases": 62,
+    "usd": 952.1800000000001
+   },
    "ALEPH": {
     "purchases": 85,
     "usd": 4621.932292000004
-   },
-   "USDC": {
-    "purchases": 61,
-    "usd": 934.1800000000001
    }
   },
   "latest": [
+   {
+    "createdAt": 1790786441646,
+    "chain": "ethereum",
+    "currency": "USDC",
+    "provider": "WALLET",
+    "usd": 18,
+    "credits": 18000000,
+    "txHash": "0x43e0f5d3ae6b043615a15a85e57e137870c90bb0d2c65083f6cbb355d659d396"
+   },
    {
     "createdAt": 1790690974412,
     "chain": "ethereum",
@@ -149,20 +158,11 @@
     "usd": 5,
     "credits": 5000000,
     "txHash": "0xaf0c40ceb767217787d99d356c605983ef7ec8927b9d24a40db9eb0c4ec1e213"
-   },
-   {
-    "createdAt": 1789396783726,
-    "chain": "ethereum",
-    "currency": "ALEPH",
-    "provider": "WALLET",
-    "usd": 4.8769849999999995,
-    "credits": 5852382,
-    "txHash": "0xe9dbc7f3d098c05452e466eb0132c21bd840dfbe02b319049aed4bab58812976"
    }
   ]
  },
  "chain": {
-  "lastScannedBlock": 26090683,
+  "lastScannedBlock": 26092357,
   "deployBlock": 24270182,
   "processingRuns": 27,
   "processedUsd": 181370.7872112756,
@@ -782,9 +782,9 @@
   },
   {
    "month": "2026-09",
-   "usd": 347.360479,
-   "purchases": 20,
-   "credits": 358152571,
+   "usd": 365.360479,
+   "purchases": 21,
+   "credits": 376152571,
    "processedUsd": 52565.74474481813,
    "alephBought": 0,
    "alephDistributed": 4754483.05,
