@@ -1,6 +1,6 @@
 {
  "schemaVersion": 2,
- "generatedAt": "2026-10-02T05:42:21.762Z",
+ "generatedAt": "2026-10-02T12:40:19.431Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
   "totalUsd": 181394.53785433678,
@@ -162,7 +162,7 @@
   ]
  },
  "chain": {
-  "lastScannedBlock": 26102613,
+  "lastScannedBlock": 26104695,
   "deployBlock": 24270182,
   "processingRuns": 28,
   "processedUsd": 181394.53785433678,
