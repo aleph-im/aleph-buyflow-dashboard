@@ -1,6 +1,6 @@
 {
  "schemaVersion": 2,
- "generatedAt": "2026-10-15T04:44:16.425Z",
+ "generatedAt": "2026-10-15T09:58:32.210Z",
  "contract": "0x6b55F32Ea969910838defd03746Ced5E2AE8cB8B",
  "revenue": {
   "totalUsd": 181588.2164674052,
@@ -8,15 +8,15 @@
   "unpricedRuns": 0
  },
  "credits": {
-  "totalUsd": 5792.719991000003,
-  "totalCredits": 6750789943,
-  "completedPurchases": 158,
+  "totalUsd": 5805.719991000003,
+  "totalCredits": 6763789943,
+  "completedPurchases": 159,
   "firstPurchaseAt": 1766398192879,
-  "lastPurchaseAt": 1791798899052,
+  "lastPurchaseAt": 1792054702440,
   "byCurrency": {
    "USDC": {
-    "purchases": 67,
-    "usd": 1002.1800000000001
+    "purchases": 68,
+    "usd": 1015.1800000000001
    },
    "ALEPH": {
     "purchases": 91,
@@ -24,6 +24,15 @@
    }
   },
   "latest": [
+   {
+    "createdAt": 1792054702440,
+    "chain": "ethereum",
+    "currency": "USDC",
+    "provider": "WALLET",
+    "usd": 13,
+    "credits": 13000000,
+    "txHash": "0x620857464a648511801c7051f61fcc7b8fa35f0e0b5f6a08ec1a754c7bb6a1b4"
+   },
    {
     "createdAt": 1791798899052,
     "chain": "ethereum",
@@ -149,20 +158,11 @@
     "usd": 1,
     "credits": 1000000,
     "txHash": "0xc754249bb5d43bd9f567e9627c5dd26245c7328aee0872a3e46a4296e3b3f7c9"
-   },
-   {
-    "createdAt": 1790129152752,
-    "chain": "ethereum",
-    "currency": "ALEPH",
-    "provider": "WALLET",
-    "usd": 13.223863999999999,
-    "credits": 15868636,
-    "txHash": "0x853721826cb63f0144244113f26c4633039e9ea8a6d20bc7d3fff13b2c4c73a2"
    }
   ]
  },
  "chain": {
-  "lastScannedBlock": 26195595,
+  "lastScannedBlock": 26197161,
   "deployBlock": 24270182,
   "processingRuns": 34,
   "processedUsd": 181588.2164674052,
@@ -932,9 +932,9 @@
   },
   {
    "month": "2026-10",
-   "usd": 218.60769899999997,
-   "purchases": 11,
-   "credits": 252329235,
+   "usd": 231.60769899999997,
+   "purchases": 12,
+   "credits": 265329235,
    "processedUsd": 217.42925612960764,
    "alephBought": 0,
    "alephDistributed": 12606.880000000001,
