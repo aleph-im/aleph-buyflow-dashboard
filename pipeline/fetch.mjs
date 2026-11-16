@@ -68,6 +68,7 @@ const LOG_CANARY = {
 
 // Known tokens; anything unknown is resolved on-chain via symbol()/decimals().
 const KNOWN_TOKENS = {
+  "0x0000000000000000000000000000000000000000": { symbol: "ETH", decimals: 18 },
   "0x27702a26126e0b3702af63ee09ac4d1a084ef628": { symbol: "ALEPH", decimals: 18 },
   "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48": { symbol: "USDC", decimals: 6 },
 };
